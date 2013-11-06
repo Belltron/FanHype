@@ -1,11 +1,14 @@
 import tweepy
 from twython import Twython
+import config
 
-# twitter api stuff
-consumer_key = 'XX0FySS0uEsbyLouAz6TrA'
-consumer_secret = 'mfVitlnsTZbNIPQlPbqj5cJeQonVZnUepXBPppnai0'
-access_token_key = '1360662272-bogDckLPDIldQIWnIMQpOohP5mb4v3wcqLu5CO0'
-access_token_secret = 'hPdpoFkpaykuUcSidGBeDdnv6qbQv3x6BTXECigJTo'
+c = config.Config()
+keys = c.get_keys()
+
+consumer_key = keys[0]
+consumer_secret = keys[1]
+access_token_key = keys[2]
+access_token_secret = keys[3]
 
 twitter = Twython(consumer_key, consumer_secret,
                   access_token_key, access_token_secret)
