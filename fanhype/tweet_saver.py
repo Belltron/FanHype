@@ -12,8 +12,8 @@ class StdOutListener(StreamListener):
 		x = 1
 
 	def on_data(self, data):
-		tweet = json.loads(data)
-		print tweet
+		#tweet = json.loads(data)
+		print data
 		return True
 
 	def on_error(self, status):
@@ -32,5 +32,6 @@ stream = Stream(auth, l)
 stanford_oregon = ['#gostanford', '#beatou', '#beatoregon', '#stanford',  '#ou', '#oregonfootball', '#ducksfootball', '#goducks', '#beatstanford']
 baylor_oklahoma = ['#Baylor', '#SicEm', '#SicEmBears', '#WatchBU', '#EveryoneInBlack', '#SicOU', '#Sooners', '#BeatBaylor', '#BoomerSooner', '#gosooners']	
 tamu_msstate = ['#gigem', '#aggies', '12thMan', '#mississippistate', '#hailstate', '#msstate']
+nebraska_michigan = ['nebraska', 'huskers', 'gobigred', 'cornhusker', 'michigan', 'goblue','bighouse','beatnebraska','wolverines']
 
-stream.filter(track=stanford_oregon)
+stream.filter(track=nebraska_michigan)
