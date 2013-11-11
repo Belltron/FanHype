@@ -1,9 +1,5 @@
 import json
-from collections import defaultdict
-import re
-from stemming import porter2
 import math
-import random
 import os
 import datetime
 import time
@@ -26,13 +22,14 @@ def read_data(filename):
         print "Failed to read data!"
         return []
     print "The json file has been successfully read!"
+    print str(len(data)) + " lines read."
     return data
 
 class GameHype(object):
     def __init__(self, tweets, teamOneTags, teamTwoTags, gameTime):
         self.tweets = tweets
-        self.teamOneTags = teamOneTags
-        self.teamTwoTags = teamTwoTags
+        self.teamOneTags = [tag.lower() for tag in teamOneTags]
+        self.teamTwoTags = [tag.lower() for tag in teamTwoTags]
         self.teamOneTotal = 0
         self.teamTwoTotal = 0
         self.teamOneBeforeKickoff = 0
@@ -84,31 +81,31 @@ class GameHype(object):
 
 
 if __name__=="__main__":
-    gameTimeString = "Sat Nov 09 19:30:00 +0000 2013"
+    gameTimeString = "Thu Nov 07 23:30:00 +0000 2013"
     gameTime = time.strptime(gameTimeString, "%a %b %d %H:%M:%S +0000 %Y")
-    tweets = read_data(os.path.join(os.getcwd(),'tweets.json'))
-    nebraskaTags = ['huskers', 'gobigred', 'cornhuskers', 'beatmichigan']
-    michiganTags = ['goblue','bighouse','beatnebraska','wolverines']
-    gameHype = GameHype(tweets, nebraskaTags, michiganTags, gameTime)
-    hypeTuple = gameHype.getHype()
-    nebraskaTotal = hypeTuple[0]
-    nebraskaHype = hypeTuple[1]
-    nebraskaHypeBefore = hypeTuple[2]
-    nebraskaHypeAfter = hypeTuple[3]
-    
-    
-    michiganTotal = hypeTuple[4]
-    michiganHype = hypeTuple[5]
-    michiganHypeBefore = hypeTuple[6]
-    michiganHypeAfter = hypeTuple[7]
-    
-    
-   
-    
+    tweets = read_data(os.path.join(os.getcwd(),'baylor_okie.json'))
+    team_one_name = 'Baylor'
+    team_two_name = 'Oklahoma'
+    team_one_tags = ['Sicou', 'Everyoneinblack', 'Watchbu', 'Sicem']
+    team_two_tags = ['BEATBAYLOR','BOOMERSOONER']
 
-    print "Total Number of Nebraska 'hype' tweets: ", nebraskaTotal
-    print "Total Number of Michigan 'hype' tweets: ", michiganTotal
-    print "Nebraska Hype before kickoff: ", int(nebraskaHypeBefore), '\t', "Michigan Hype before kickoff: ", int(michiganHypeBefore)
-    print "Nebraska Hype after kickoff: ", int(nebraskaHypeAfter), '\t', "Michigan Hype after kickoff: ", int(michiganHypeAfter)
-    print "All Nebraska Hype: ", int(nebraskaHype), '\t', "All Michigan Hype: ", int(michiganHype)
+    gameHype = GameHype(tweets, team_one_tags, team_two_tags, gameTime)
+    hypeTuple = gameHype.getHype()
+    team_one_total = hypeTuple[0]
+    team_one_hype = hypeTuple[1]
+    team_one_hype_before = hypeTuple[2]
+    team_one_hype_after = hypeTuple[3]
+    
+    
+    team_two_total = hypeTuple[4]
+    team_two_hype = hypeTuple[5]
+    team_two_hype_before = hypeTuple[6]
+    team_two_hype_after = hypeTuple[7]
+    
+    
+    print "Total Number of "+team_one_name+" hype tweets: ", team_one_total
+    print "Total Number of "+team_two_name+" hype tweets: ", team_two_total
+    print team_one_name+" Hype before kickoff: ", int(team_one_hype_before), '\t', team_two_name+" Hype before kickoff: ", int(team_two_hype_before)
+    print team_one_name+" Hype after kickoff: ", int(team_one_hype_after), '\t', team_two_name+" Hype after kickoff: ", int(team_two_hype_after)
+    print "All "+team_one_name+" Hype: ", int(team_one_hype), '\t', "All "+team_two_name+" Hype: ", int(team_two_hype)
     
