@@ -4,7 +4,7 @@ import sys
 
 
 if len(sys.argv) != 3:
-	print "tweet_transform.py <input_file_name> <output_file_name>"
+	print sys.argv[0] + " <input_file_name> <output_file_name>"
 	sys.exit(2)
 input_file_name = sys.argv[1]
 output_file_name = sys.argv[2]
