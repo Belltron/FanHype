@@ -12,7 +12,6 @@ class StdOutListener(StreamListener):
 		x = 1
 
 	def on_data(self, data):
-		#tweet = json.loads(data)
 		print data
 		return True
 
