@@ -12,16 +12,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class Tweet(ndb.Model):
-	screen_name = ndb.StringProperty(indexed=False)
-	coordinates = ndb.GeoPtProperty()
-	date = ndb.DateTimeProperty(auto_now_add=True)
+    screen_name = ndb.StringProperty(indexed=False)
+    coordinates = ndb.GeoPtProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class MainPage(webapp2.RequestHandler):
         def get(self):                
                 template = JINJA_ENVIRONMENT.get_template('index.html')
                 self.response.write(template.render(title = "Howdy"))
-		
+
 class SingleGame(webapp2.RequestHandler):
     def post(self):
         collector = TweetCollector()
