@@ -3,6 +3,7 @@ import cgi
 from google.appengine.ext import ndb
 import jinja2
 import os
+from query_tweet_collector import TweetCollector
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -37,9 +38,19 @@ class MainPage(webapp2.RequestHandler):
 
 		
 class SingleGame(webapp2.RequestHandler):
-    def post(self):
+    def post(self):        
         template = JINJA_ENVIRONMENT.get_template('gamehype.html')
         self.response.write(template.render(title = "lol"))
+        collector = TweetCollector()
+        query = "Nebraska"
+        listOfTweetTuples = collector.CollectTweets(query)
+        self.response.write('<html><body>')
+        for tweet in listOfTweetTuples:
+                self.response.write('<p>')
+                self.response.write('<p style="float: left;"><img src=%s height="32px" width="32px" border="1px"></p>' % tweet[0])
+                self.response.write('<p>%s<br><br><br></p>' % tweet[1])
+                self.response.write('</p>')
+        self.response.write('</body></html>')
         #self.response.write('<html><body>Nebraska vs. Michigan:<pre>')
         #self.response.write(cgi.escape(self.request.get('content')))
         #self.response.write('</pre></body></html>')

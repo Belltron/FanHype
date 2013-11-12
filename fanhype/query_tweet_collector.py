@@ -1,17 +1,16 @@
 import tweepy
 import json
+import config
+from tweepy import OAuthHandler
 
 
 class TweetCollector():
-    def __init__(self):
-    	self.consumer_key = ''
-	self.consumer_secret = ''
-	self.access_token_key = ''
-	self.access_token_secret = ''
-
-    def CollectTweets(self, query, listofTags):
-        auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        auth.set_access_token(self.access_token_key, self.access_token_secret)
+    def CollectTweets(self, query):
+        c = config.Config()
+        keys = c.get_keys()
+        auth = OAuthHandler(keys[0], keys[1])
+        auth.set_access_token(keys[2], keys[3])
+        
         api = tweepy.API(auth)
         
         tw = {}
@@ -27,20 +26,15 @@ class TweetCollector():
             rpp=100,
             result_type="recent",
             include_entities=True,
-            lang="en").items(2000):
+            lang="en").items(5):
             tweetText = tweet.text.encode('utf-8')
             tw['entities'] = tweet.entities            
             tagInfo = ((tw['entities'])['hashtags'])
-            for tag in tagInfo:
-                tagText = tag['text']
-                tagText = tagText.lower()
-                if tagText in listofTags:
-                    printList.append(tweetText)
+            imageURL = tweet.user.profile_image_url_https
+            printList.append((imageURL,tweetText))
         
-        #Print to file for testing purposes
-        fileName = query + ".json"
-        with open(fileName, 'w') as outfile:
-            json.dump(printList, outfile, indent = 0)
+        print printList
+        return printList
     
         
 if __name__ == "__main__":
@@ -64,4 +58,4 @@ if __name__ == "__main__":
     #collector.CollectTweets(stanfordQuery, stanfordTags)
     #collector.CollectTweets(oregonQuery, oregonTags)
     #collector.CollectTweets(baylorQuery, baylorTags)
-    collector.CollectTweets(oklahomaQuery, oklahomaTags)
+    collector.CollectTweets(oklahomaQuery)
