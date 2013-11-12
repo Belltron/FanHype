@@ -27,10 +27,8 @@ class TweetCollector():
             result_type="recent",
             include_entities=True,
             lang="en").items(5):
-            tweetText = tweet.text.encode('utf-8')
-            tw['entities'] = tweet.entities            
-            tagInfo = ((tw['entities'])['hashtags'])
-            imageURL = tweet.user.profile_image_url_https
+            tweetText = tweet.text      #.encode('utf-8')           
+            imageURL = tweet.user.profile_image_url_https       #.encode('utf-8')
             printList.append((imageURL,tweetText))
         
         print printList
