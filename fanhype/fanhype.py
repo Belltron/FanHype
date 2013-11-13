@@ -30,29 +30,25 @@ class SingleGame(webapp2.RequestHandler):
         collector = TweetCollector()
         query = "Kentucky"
         listOfTweets = []
-        #listOfTweets = collector.CollectTweets(query)
-        collector.CollectTweets(query)
-
-        #appDataQuery = ApplicationData.query()
-        #tweets = appDataQuery.fetch(5)
-        tweets = ApplicationData.queryTweets()
+        #collector.CollectTweets(query)
+        tweets = ApplicationData.queryTweets().fetch(5)
         for tweet in tweets:
                 listOfTweets.append(tweet.tweetText)
-        #collector.CollectTweets(query)
         template_values = {'listOfTweets': listOfTweets,}
                 
         template = JINJA_ENVIRONMENT.get_template('gamehype.html')
         self.response.write(template.render(template_values))
 
 class TweetScript(webapp2.RequestHandler):
-        def get(self):
+        def get(self):                        
                 c = config.Config()
                 keys = c.get_keys()
                 auth = OAuthHandler(keys[0], keys[1])
                 auth.set_access_token(keys[2], keys[3])        
                 api = tweepy.API(auth)
-                query = "Obama"
+                query = "Johnny Football"
                 tw = {}
+                #appData = ApplicationData()
                         
                 tweetList = []
                 tweetText = ""
@@ -66,14 +62,14 @@ class TweetScript(webapp2.RequestHandler):
                     result_type="recent",
                     include_entities=True,
                     lang="en").items(5):
-                    tweetText = tweet.text      #.encode('utf-8')           
-                    imageURL = tweet.user.profile_image_url_https       #.encode('utf-8')
-                    #printList.append((imageURL,tweetText))
-                    printList.append(tweetText)
+                    tweetText = tweet.text      #.encode('utf-8')
+                    appData = ApplicationData()
+                    appData.tweetText = tweetText
+                    appData.put()
 
-                appData = ApplicationData()
-                appData.tweetText = tweetText
-                appData.put()   
+                #appData = ApplicationData()
+                #appData.tweetText = tweetText
+                #appData.put()   
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
