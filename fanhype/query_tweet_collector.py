@@ -33,7 +33,9 @@ class TweetCollector():
             #printList.append((imageURL,tweetText))
             printList.append(tweetText)
 
-        #ApplicationData.setTweetTextList(printList)
+        appData = ApplicationData()
+        appData.tweetText = tweetText
+        appData.put()
         
         print printList
         return printList

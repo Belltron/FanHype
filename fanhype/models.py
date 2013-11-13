@@ -1,11 +1,11 @@
 from google.appengine.ext import ndb
 
 class ApplicationData(ndb.Model):
-    tweetTextList = ndb.StringProperty(repeated=True)
+    tweetText = ndb.StringProperty()
+    #tweetTextList = ndb.StringProperty(repeated = True)
+    date = ndb.DateTimeProperty(auto_now_add=True)
 
-    @staticmethod
-    def setTweetTextList(tList):
-        tweetTextList = tList
-
-    def getTweetTextList():
-        return tweetTextList
+    @classmethod
+    def queryTweets(cls):
+        return cls.query().order(-cls.date)
+        

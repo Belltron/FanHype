@@ -6,7 +6,7 @@ threadsafe: true
 
 handlers:
 - url: /.*
-  script: fanhype.application  
+  script: fanhype.application 
   
 libraries:
 - name: webapp2
