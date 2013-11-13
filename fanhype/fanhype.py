@@ -16,12 +16,11 @@ class Tweet(ndb.Model):
 	image_url = ndb.StringProperty(indexed=False)
 	date = ndb.DateTimeProperty(auto_now_add=True)
 
-
 class MainPage(webapp2.RequestHandler):
         def get(self):                
                 template = JINJA_ENVIRONMENT.get_template('index.html')
                 self.response.write(template.render(title = "Howdy"))
-		
+
 class SingleGame(webapp2.RequestHandler):
     def post(self):
         collector = TweetCollector()
