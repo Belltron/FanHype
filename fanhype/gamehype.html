@@ -9,10 +9,8 @@
     <form action="/gamehype" method="post">
       <div><input type="submit" value="This button needs to go to home page. Also needs different location"></div>
     </form>
-	{% for tweetTuple in listOfTweetTuples %}
-	  <p> 
-	  <p style="float: left;"><img src= {{tweetTuple[0]}} height="32px" width="32px" border="1px"></p>
-	  <p> {{tweetTuple[1]}} <br><br><br></p>
+	{% for tweet in listOfTweets %}
+	  <p> {{tweet}} <br></p>
 	 {% endfor %}	
   </body>
 </html>

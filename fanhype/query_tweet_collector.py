@@ -2,6 +2,7 @@ import tweepy
 import json
 import config
 from tweepy import OAuthHandler
+from models import ApplicationData
 
 
 class TweetCollector():
@@ -29,7 +30,10 @@ class TweetCollector():
             lang="en").items(5):
             tweetText = tweet.text      #.encode('utf-8')           
             imageURL = tweet.user.profile_image_url_https       #.encode('utf-8')
-            printList.append((imageURL,tweetText))
+            #printList.append((imageURL,tweetText))
+            printList.append(tweetText)
+
+        #ApplicationData.setTweetTextList(printList)
         
         print printList
         return printList

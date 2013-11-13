@@ -13,7 +13,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class Tweet(ndb.Model):
 	screen_name = ndb.StringProperty(indexed=False)
-	coordinates = ndb.GeoPtProperty()
+	image_url = ndb.StringProperty(indexed=False)
 	date = ndb.DateTimeProperty(auto_now_add=True)
 
 
@@ -26,9 +26,9 @@ class SingleGame(webapp2.RequestHandler):
     def post(self):
         collector = TweetCollector()
         query = "Nebraska"
-        listOfTweetTuples = collector.CollectTweets(query)
+        listOfTweets = collector.CollectTweets(query)
 
-        template_values = {'listOfTweetTuples': listOfTweetTuples,}
+        template_values = {'listOfTweets': listOfTweets,}
                 
         template = JINJA_ENVIRONMENT.get_template('gamehype.html')
         self.response.write(template.render(template_values))        
