@@ -7,11 +7,11 @@
 </head>
 <body>
 	<nav>
-		<h1 id="mark"><a href="#">fanhype</a></h1>
+		<h1 id="mark"><a href="../">fanhype</a></h1>
 
 		<ul>
-			<li><a href="#">HOME</a></li>
-			<li><a href="#">GAMES</a></li>
+			<li><a href="../">HOME</a></li>
+			<li><a href="./">GAMES</a></li>
 			<li><a href="#">ABOUT</a></li>
 		</ul>
 	</nav>
@@ -32,40 +32,171 @@
 				</div>
 			</div>
 			<div id="left_team">
-				<img src="http://placehold.it/200x200/ffeeee/4F1315" alt="oklahoma" id="left_logo">
-				<div class="team_record">
-					<p>#10</p>
-					<p>(7-1)</p>
-				</div>
+				<img src="../img/oklahoma_200.png" alt="oklahoma" id="left_logo">
 			</div>
 			<div id="right_team">
-				<div class="team_record">
-					<p>#6</p>
-					<p>(7-0)</p>
-				</div>
-				<img src="http://placehold.it/200x200/eeffee/003015" alt="baylor" id="right_logo"></div>
+				<img src="../img/baylor_200.png" alt="baylor" id="right_logo"></div>
 			</div>
 		<hr>
 		<div class="split">
-			<div id="map">
-				Heat Map
+			<div id="heat_map">
+				<h1>Heat Map</h1>
+				<div id="map">I'm a map!</div>
 			</div>
+			<div class="rule"> </div>
 			<div id="stats">
-				<div id="graph"></div>
+				<h1>Hype Stats</h1>
+				<div id="graph_wrapper">
+					<div id="graph_title"><h2>Total Tweets</h2></div>
+					<div id="graph"></div>
+				</div>
+				<div id="hashtags">
+					<ul>
+						<h2>Oklahoma Hashtags</h2>
+						<li><a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a></li>
+						<li><a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a></li>
+					</ul>
+					<ul>
+						<h2>Baylor Hashtags</h2>
+						<li><a href="https://twitter.com/search?q=%23sicou">#sicou</a></li>
+						<li><a href="https://twitter.com/search?q=%23sicem">#sicem</a></li>
+						<li><a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a></li>
+						<li><a href="https://twitter.com/search?q=%23watchbu">#watchbu</a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<hr>
-		<div class="split">
-			<div id="top_tweet_left"></div>
-			<div id="top_tweet_right"></div>
+		<div id="top_tweets">
+			<h1>Top Tweets</h1>
+			<div id="top_tweet_left">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
+						[-97.14821387,31.53009687]</p>
+					<p>Followers: 302</p>
+					<p>Friends: 131</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
+					baylor sucks and OU is so great wow
+					<a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+				</p>
+				<hr>
+				<h2 style="color:#b20837;">Oklahoma hype score: 30</h2>
+			</div>
+			<div id="top_tweet_right">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
+						[-97.14821387,31.53009687]</p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23sicem">
+					#sicem</a> bears! woo! yeah go bears
+					<a href="https://twitter.com/search?q=%23sicou">#sicou</a>
+					<a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+				</p>
+				<hr>
+				<h2 style="color:#004933;">Baylor hype score: 92</h2>
+			</div>
 		</div>
 		<hr>
 		<div id="stream">
-			<div class="tweet"></div>
-			<div class="tweet"></div>
-			<div class="tweet"></div>
-			<div class="tweet"></div>
-			<div class="tweet"></div>
+			<h1>Live Stream</h1>
+			<div class="stream_tweet left">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
+					baylor sucks and OU is so great wow
+					<a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+				</p>
+			</div>
+			<div class="stream_tweet right">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23sicem">
+					#sicem</a> bears! woo! yeah go bears
+					<a href="https://twitter.com/search?q=%23sicou">#sicou</a>
+					<a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+				</p>
+			</div>
+			<div class="stream_tweet left">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
+					baylor sucks and OU is so great wow
+					<a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+				</p>
+			</div>
+			<div class="stream_tweet right">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23sicem">
+					#sicem</a> bears! woo! yeah go bears
+					<a href="https://twitter.com/search?q=%23sicou">#sicou</a>
+					<a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+				</p>
+			</div>
+			<div class="stream_tweet right">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23sicem">
+					#sicem</a> bears! woo! yeah go bears
+					<a href="https://twitter.com/search?q=%23sicou">#sicou</a>
+					<a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+				</p>
+			</div>
+			<div class="stream_tweet left">
+				<img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+				<div class="user_info">
+					<p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+					<p>Followers: 20910</p>
+					<p>Friends: 5431</p>
+
+				</div>
+				<p class="tweet_text">
+					<a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
+					baylor sucks and OU is so great wow
+					<a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+				</p>
+			</div>
 		</div>
 
 	</div>
@@ -127,11 +258,11 @@
 	            	name: 'Tweets',
 	                data: [{
 						name: 'Oklahoma',
-						color: '#4F1315',
+						color: '#b20837',
 						y: 4218
 					}, {
 						name: 'Baylor',
-						color: '#003015',
+						color: '#004933',
 						y: 9428
 					}]
 	            }]

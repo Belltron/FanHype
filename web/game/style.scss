@@ -32,16 +32,30 @@ ul, li {
 	list-style: none;
 }
 
+h1, h2, h3 {
+	font-family: 'Droid Serif', serif;
+	font-style: italic;
+	font-weight: 700;
+}
+
 /* variables */
 
 $link_color: #000;
 $hover_color: #f00;
-$oklahoma: #4F1315;
-$baylor: #003015;
-$team_width: 300px;
+$oklahoma: #b20837;
+$baylor: #004933;
+$team_width: 200px;
 $bar_h: 30px;
 
 /* styles */
+
+a {
+	color: $link_color;
+
+	&:hover {
+		color: $hover_color;
+	}
+}
 
 nav {
 	width: 100%;
@@ -56,14 +70,6 @@ nav {
 		font-family: 'Droid Serif', serif;
 		font-style: italic;
 		font-weight: 700;
-
-		a {
-			color: $link_color;
-
-			&:hover{
-				color: $hover_color;
-			}
-		}
 	}
 
 	ul {
@@ -77,11 +83,6 @@ nav {
 				padding: 22px;
 				font-size: 11px;
 				letter-spacing: 1px;
-				color: $link_color;
-
-				&:hover {
-					color: $hover_color;
-				}
 			}
 		}
 	}
@@ -114,11 +115,11 @@ div#game_info {
 		height: 200px;
 
 		h1 {
+			padding-top: 30px;
 			font-size: 36px;
 			font-family: 'Droid Serif', serif;
 			font-style: italic;
 			font-weight: 700;
-			color: $link_color;
 		}
 
 		p {
@@ -177,16 +178,6 @@ div#game_info {
 
 	.team {
 		width: $team_width;
-		
-		p {
-			padding-top: 10px;
-		}
-
-		div.team_record {
-			float:left;
-			margin-top: 30px;
-			width: 100px;
-		}
 	}
 
 	div#left_team {
@@ -211,36 +202,255 @@ div#game_info {
 	}
 }
 
+div.rule {
+	position: absolute;
+	left: 50%;
+	width: 1px;
+	height: 390px;
+	background: #000;
+}
+
 div.split {
-	div#map {
-		float:left;
-		width: 45%;
-		height: 300px;
-		margin-left: 5%;
-		/* delete this later */
-		padding-top: 110px;
+	height: 420px;
+	padding: 15px 5%;
+
+	h1 {
+		display: block;
+		height: 45px;
 		text-align: center;
-		font-size: 60px;
-		font-family: 'Droid Serif', serif;
-		font-style: italic;
-		font-weight: 700;
-		color: #fff;
-		text-shadow: #000 0 0 8px;
-		background: url('http://i.imgur.com/OSbPV99.png?1') #ff3838;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
+	}
+
+	.split_section {
+		float: left;
+		width: 50%;
+		height: 345px;
+	}
+
+	div#heat_map {
+		@extend .split_section;
+		padding-right: 15px;
+
+		div#map {
+			height: inherit;
+			/* delete this later */
+			padding-top: 110px;
+			text-align: center;
+			font-size: 60px;
+			font-family: 'Droid Serif', serif;
+			font-style: italic;
+			font-weight: 700;
+			color: #fff;
+			text-shadow: #000 0 0 8px;
+			background: url('http://i.imgur.com/OSbPV99.png?1') #eee;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			transition: ease-in-out all 1s;
+
+			&:hover {
+				background: url('http://i.imgur.com/OSbPV99.png') #ff3838;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				transition: ease-in-out all 1s;
+			}
+		}
 	}
 
 	div#stats {
-		float: left;
-		width: 45%;
-		height: 300px;
+		@extend .split_section;
+		padding-left: 15px;
 
-		div#graph {
-			width: 240px;
-			height: 300px;
+		div#graph_wrapper {
+			float:left;
+			width: 60%;
+
+			div#graph_title {
+				height: 30px;
+
+				h2 {
+					text-align: center;
+				}
+
+			}
+
+			div#graph {
+				width: 100%;
+				height: 330px;
+			}
+		}
+
+		div#hashtags {
+			float:right;
+			width: 40%;
+			text-align: right;
+
+			h2 {
+				font-size: 18px
+			}
+
+			ul {
+				padding: 6px;
+
+				li {
+					padding: 3px;
+					font-weight: 300;
+
+					a {
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
+}
+
+div#top_tweets {
+	padding: 15px 5%;
+
+	h1 {
+		padding-bottom: 15px;
+		text-align: center;
+	}
+
+	.top_tweet {
+		width: 48%;
+		margin-bottom: 15px;
+		background: #fff;
+		border: 1px solid #000;
+
+		img {
+			width: 60px;
+			height: 60px;
+			margin: 15px 15px 0 15px;
+			float: left;
+		}
+
+		div.user_info {
+			height: 60px;
+			margin: 15px 15px 0 15px;
+			
+			p {
+				font-size: 12px;
+				font-weight: 300;
+			}
+
+			p.screen_name {
+				padding: 3px;
+				font-family: 'Droid Serif', serif;
+				font-size: 15px;
+				font-weight: 700;
+			}
+
+			p.right_info {
+				float: right;
+				text-align: right;
+			}
+		}
+
+		p.tweet_text {
+			padding: 9px 15px;
+			font-weight: 300;
+			font-size: 21px;
+
+			a {
+				text-decoration: underline;
+			}
+		}
+
+		h2 {
+			margin: 12px 15px;
+			text-align: right;
+		}
+	}
+
+	div#top_tweet_left {
+		@extend .top_tweet;
+		float: left;
+		
+	}
+
+	div#top_tweet_right {
+		@extend .top_tweet;
+		float: right;
+	}
+}
+
+div#stream {
+	padding: 15px 5%;
+	
+	h1 {
+		padding-bottom: 15px;
+		text-align: center;
+	}
+
+	.left {
+		float: left;
+		color: $oklahoma;
+	}
+
+	.right {
+		float: right;
+		color: $baylor;
+	}
+
+	div.stream_tweet {
+		display: block;
+		width: 80%;
+		margin-bottom: 15px;
+		background: #fff;
+		border: 1px solid #000;
+
+
+		img {
+			float: left;
+			width: 60px;
+			height: 60px;
+			margin: 15px;
+		}
+
+		div.user_info {
+			float: left;
+			width: 135px;
+			height: 60px;
+			margin: 15px;
+			
+			p {
+				font-size: 12px;
+				font-weight: 300;
+			}
+
+			p.screen_name {
+				padding: 3px;
+				font-family: 'Droid Serif', serif;
+				font-size: 15px;
+				font-weight: 700;
+			}
+
+			p.right_info {
+				float: right;
+				text-align: right;
+			}
+		}
+
+		p.tweet_text {
+			position: absolute;
+			width: 40%;
+			margin-left: 270px;
+			padding: 15px;
+			font-weight: 300;
+			font-size: 18px;
+
+			a {
+				text-decoration: underline;
+			}
+		}
+
+		h2 {
+			margin: 12px 15px;
+			text-align: right;
 		}
 	}
 }
