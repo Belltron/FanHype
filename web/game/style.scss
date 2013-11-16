@@ -1,0 +1,246 @@
+/* FANHYPE GAME PAGE style.scss */
+/* reset */
+
+*, *:before, *:after {
+	-webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box; 
+	margin: 0;
+	padding: 0;
+}
+
+.content {
+	-webkit-box-sizing: content-box; 
+	-moz-box-sizing: content-box; 
+	box-sizing: content-box; 
+}
+
+html {
+	background: #fff;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	font-family: 'open sans', sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul, li {
+	list-style: none;
+}
+
+/* variables */
+
+$link_color: #000;
+$hover_color: #f00;
+$oklahoma: #4F1315;
+$baylor: #003015;
+$team_width: 300px;
+$bar_h: 30px;
+
+/* styles */
+
+nav {
+	width: 100%;
+	padding: 0 5%;
+	height: 60px;
+	background: #fff;
+
+	h1#mark {
+		display: inline-block;
+		padding: 18px;
+		font-size: 18px;
+		font-family: 'Droid Serif', serif;
+		font-style: italic;
+		font-weight: 700;
+
+		a {
+			color: $link_color;
+
+			&:hover{
+				color: $hover_color;
+			}
+		}
+	}
+
+	ul {
+		float: right;
+		padding-top: 22px;
+
+		li {
+			float: left;
+
+			a {
+				padding: 22px;
+				font-size: 11px;
+				letter-spacing: 1px;
+				color: $link_color;
+
+				&:hover {
+					color: $hover_color;
+				}
+			}
+		}
+	}
+}
+
+hr {
+	margin: 0 auto;
+	width: 90%;
+	height: 1px;
+	background: #000;
+	border: 0;
+}
+
+div#game_info {
+	margin: 0 5%;
+	padding: 20px $team_width 0;
+	height: 240px;
+	clear: both;
+
+	.column {
+		position: relative;
+		float: left;
+		text-align: center;
+	}
+
+	div#info {
+		@extend .column;
+		width: 100%;
+		background: #fff;
+		height: 200px;
+
+		h1 {
+			font-size: 36px;
+			font-family: 'Droid Serif', serif;
+			font-style: italic;
+			font-weight: 700;
+			color: $link_color;
+		}
+
+		p {
+			font-size: 14px;
+			font-weight: 300;
+		}
+
+		div.bar {
+			display: block;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: $bar_h;
+			margin: 0 auto;
+			font-size: 12px;
+			font-weight: 300;
+			color: #fff;
+
+			.partial_bar {
+				position: absolute;
+				top: 0;
+				padding: 6px 6px;
+				height: $bar_h;
+				background: $baylor;
+			}
+
+			div.right {
+				@extend .partial_bar;
+				right: 0;
+				width: 100%;
+				text-align: right;
+				background: $baylor;
+			}
+
+			div.left {
+				@extend .partial_bar;
+				left: 0;
+				width: 50%;
+				text-align: left;
+				background: $oklahoma;
+
+				&:after {
+					position: absolute;
+				    top: 0;
+				    right: -4px;
+				    content: '';
+					width: 8px;
+					height: $bar_h; 
+					background: #fff;
+					border: 1px solid #000;
+				}
+			}
+		}
+	}
+
+	.team {
+		width: $team_width;
+		
+		p {
+			padding-top: 10px;
+		}
+
+		div.team_record {
+			float:left;
+			margin-top: 30px;
+			width: 100px;
+		}
+	}
+
+	div#left_team {
+		@extend .column;
+		@extend .team;
+		margin-left: -100%;
+		right: $team_width;
+
+		img#left_logo {
+			float: left;
+		}
+	}
+
+	div#right_team {
+		@extend .column;
+		@extend .team;
+		margin-right: -$team_width;
+
+		img#right_logo {
+			float: left;
+		}
+	}
+}
+
+div.split {
+	div#map {
+		float:left;
+		width: 45%;
+		height: 300px;
+		margin-left: 5%;
+		/* delete this later */
+		padding-top: 110px;
+		text-align: center;
+		font-size: 60px;
+		font-family: 'Droid Serif', serif;
+		font-style: italic;
+		font-weight: 700;
+		color: #fff;
+		text-shadow: #000 0 0 8px;
+		background: url('http://i.imgur.com/OSbPV99.png?1') #ff3838;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+
+	div#stats {
+		float: left;
+		width: 45%;
+		height: 300px;
+
+		div#graph {
+			width: 240px;
+			height: 300px;
+		}
+	}
+}

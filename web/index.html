@@ -1,0 +1,75 @@
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+	<link href='style.css' rel='stylesheet' type='text/css'>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+	<nav>
+		<h1 id="mark"><a href="#">fanhype</a></h1>
+
+		<ul>
+			<li><a href="#">HOME</a></li>
+			<li><a href="#">GAMES</a></li>
+			<li><a href="#">ABOUT</a></li>
+		</ul>
+	</nav>
+
+	<hr>
+
+	<div id="content">
+			<article id="game1">
+				<div class="game_info">
+						<h1>Oregon @ Stanford</h1>
+						<p>Thursday, November 7, 8:00 PM (CT)<br>
+						Stanford Stadium, Stanford, California</p>
+
+					<img src="http://placehold.it/180x180/ffffff/004F27" alt="oregon" class="left_logo">
+					<img src="http://placehold.it/180x180/ffffff/8C1515" alt="stanford" class="right_logo">
+				</div>
+				<div class="bar">
+					<div class="right">50%</div>
+					<div class="left">50%</div>
+				</div>
+			</article>
+
+		<a href="game/index.html">
+			<article id="game2">
+				<div class="game_info">
+						<h1>Oklahoma @ Baylor</h1>
+						<p>Thursday, November 7, 6:30 PM (CT)<br>
+						Floyd Casey Stadium, Waco, Texas</p>
+
+					<img src="http://placehold.it/180x180/ffffff/4F1315" alt="oklahoma" class="left_logo">
+					<img src="http://placehold.it/180x180/ffffff/003015" alt="baylor" class="right_logo">
+				</div>
+				<div class="bar">
+					<div class="right">50%</div>
+					<div class="left">50%</div>
+				</div>
+			</article>
+		</a>
+		
+		<div id="debug">
+			<input id="score"/>
+			<a href="#" id="change">Oregon's Hype %</a>
+		</div>
+	</div>
+
+	<script>
+		var oregon = '#game1 div.bar div.left';
+		var stanford = '#game1 div.bar div.right';
+		var fullWidth = $('#game1 div.bar').width();
+
+		$('#change').click(function() {
+			$(oregon).animate({width:($('#score').val() * fullWidth * 0.01).toString()});
+			$(oregon).text($('#score').val() + '%');
+			$(stanford).text(100 - $('#score').val() + '%');
+		});
+
+		$('#game2 div.bar div.left').css({'background':'#4F1315'});
+		$('#game2 div.bar div.right').css({'background':'#003015'});
+	</script>
+</body>
+</html>
