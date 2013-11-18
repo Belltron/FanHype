@@ -19,9 +19,21 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class MainPage(webapp2.RequestHandler):
-        def get(self):                
-                template = JINJA_ENVIRONMENT.get_template('index.html')
-                self.response.write(template.render(title = "Howdy"))
+        def get(self):
+            template = JINJA_ENVIRONMENT.get_template('index.html')
+            
+            tweet_query = Tweet.query()
+            tweets = tweet_query.fetch()
+
+            #Example separation of tweets into two teams' tweets.
+            team_one_tweets = [tweet for tweet in tweets if tweet.coordinates.lat > 40]
+            team_two_tweets = [tweet for tweet in tweets if tweet.coordinates.lat < 40]
+
+            template_values = {
+                'team_one_tweets': team_one_tweets,
+                'team_two_tweets': team_two_tweets
+            }
+            self.response.write(template.render(template_values))
 
 
 class SingleGame(webapp2.RequestHandler):
@@ -64,23 +76,7 @@ class TweetScript(webapp2.RequestHandler):
                     tweetText = tweet.text      #.encode('utf-8')
                     appData = ApplicationData()
                     appData.tweetText = tweetText
-                    appData.put()
-                    
-    def get(self):
-        template = JINJA_ENVIRONMENT.get_template('index.html')
-
-        tweet_query = Tweet.query()
-        tweets = tweet_query.fetch()
-
-        #Example separation of tweets into two teams' tweets.
-        team_one_tweets = [tweet for tweet in tweets if tweet.coordinates.lat > 40]
-        team_two_tweets = [tweet for tweet in tweets if tweet.coordinates.lat < 40]
-
-        template_values = {
-            'team_one_tweets': team_one_tweets,
-            'team_two_tweets': team_two_tweets
-        }
-        self.response.write(template.render(template_values))
+                    appData.put()   
 
 class SaveTweet(webapp2.RequestHandler):
     def get(self):
