@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 import jinja2
 import os
 from query_tweet_collector import TweetCollector
-from models import ApplicationData
+from models import ApplicationData, Tweet
 import tweepy
 from tweepy import OAuthHandler
 import config
@@ -15,15 +15,17 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-class Tweet(ndb.Model):
-	screen_name = ndb.StringProperty(indexed=False)
-	image_url = ndb.StringProperty(indexed=False)
-	date = ndb.DateTimeProperty(auto_now_add=True)
-
 class MainPage(webapp2.RequestHandler):
         def get(self):                
                 template = JINJA_ENVIRONMENT.get_template('index.html')
                 self.response.write(template.render(title = "Howdy"))
+
+                new_tweet = Tweet()
+                new_tweet.tweetText = "test"
+                new_tweet.hashTags = ['lol', 'yup', 'aggies']
+                new_tweet.coordinates = ndb.GeoPt(-36.654, 26.546)
+                new_tweet.put()
+
 
 class SingleGame(webapp2.RequestHandler):
     def post(self):
