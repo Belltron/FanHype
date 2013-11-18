@@ -20,13 +20,6 @@ class MainPage(webapp2.RequestHandler):
                 template = JINJA_ENVIRONMENT.get_template('index.html')
                 self.response.write(template.render(title = "Howdy"))
 
-                new_tweet = Tweet()
-                new_tweet.tweetText = "test"
-                new_tweet.hashTags = ['lol', 'yup', 'aggies']
-                new_tweet.coordinates = ndb.GeoPt(-36.654, 26.546)
-                new_tweet.put()
-
-
 class SingleGame(webapp2.RequestHandler):
     def post(self):
         collector = TweetCollector()
