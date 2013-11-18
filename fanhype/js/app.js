@@ -1,4 +1,6 @@
 var map, pointarray, heatmap, tweetmap;
+var team_one_points = []
+var team_two_points = [];
 
 var team_one_gradient = [
     'rgba(0, 255, 255, 0)',
@@ -34,22 +36,26 @@ function initialize() {
     json = $('#point_data').html() 
     var obj = jQuery.parseJSON( json );
     
-    for (var i=0; i<obj.coordinates.length; i++){
-         tweetData.push(new google.maps.LatLng(obj.coordinates[i][0], obj.coordinates[i][1]));
+    for (var i=0; i<obj.team_one_coordinates.length; i++){
+         team_one_points.push(new google.maps.LatLng(obj.team_one_coordinates[i][0], obj.team_one_coordinates[i][1]));
+    };
+    for (var i=0; i<obj.team_two_coordinates.length; i++){
+         team_two_points.push(new google.maps.LatLng(obj.team_two_coordinates[i][0], obj.team_two_coordinates[i][1]));
     };
 
 
-    var pointArray = new google.maps.MVCArray(taxiData);
+    var pointArray = new google.maps.MVCArray(team_one_points);
 
     heatmap = new google.maps.visualization.HeatmapLayer({
         data: pointArray,
-        radius: 20
+        radius: 20,
+        gradient: null
     });
 
     heatmap.setMap(map);
 
 
-    var tweetPointArray = new google.maps.MVCArray(tweetData);
+    var tweetPointArray = new google.maps.MVCArray(team_two_points);
 
     tweetmap = new google.maps.visualization.HeatmapLayer({
         data: tweetPointArray,
