@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <style>
+      html, body, #map-canvas {
+        margin: 0px;
+        padding: 0px
+      }
+      #map-canvas {
+      	height: 400px;
+        width: 600px;
+      	margin: 100px;
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+  <body>
+	<div id="point_data" style="display:none;">
+		{
+			"coordinates": [
+				{% for tweet in tweets %}
+					[ {{ tweet.coordinates.lat }}, {{ tweet.coordinates.lon }} ]
+					{% if loop.index < tweets|length  %}
+						,
+					{% endif %}
+				{% endfor %}
+			]
+		}
+	</div>
+    <div id="map-canvas"></div>
+  </body>
+</html>
+
+
+{% endautoescape %}
