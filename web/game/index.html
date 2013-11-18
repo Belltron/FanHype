@@ -268,6 +268,14 @@
 	            }]
 	        });
 	    });
+
+		var left = '#info div.bar div.left';
+		var right = '#info div.bar div.right';
+		var fullWidth = $(right).width();
+
+		$(left).animate({width:(31 * fullWidth * 0.01).toString()});
+		$(right).text('69%');
+		$(left).text('31%');
 	</script>
 	<script src="js/highcharts.js"></script>
 </body>
