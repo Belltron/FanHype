@@ -20,7 +20,7 @@ class Tweet(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        template = JINJA_ENVIRONMENT.get_template('html/index.html')
+        template = JINJA_ENVIRONMENT.get_template('index.html')
 
         tweet_query = Tweet.query()
         tweets = tweet_query.fetch()
