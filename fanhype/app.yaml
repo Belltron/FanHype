@@ -5,9 +5,13 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /css
+  static_dir: css
+- url: /js
+  static_dir: js
 - url: /.*
   script: fanhype.application 
-  
+
 libraries:
 - name: webapp2
   version: latest
@@ -16,3 +20,4 @@ libraries:
   
 builtins:
 - remote_api: on
+

@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+
+</head>
   <body>
-  <h1>Welcome to Fan Hype! Go ahead, select a game!</h1>
-    <form action="/gamehype" method="post">
-		 <div><input type="submit" value="Nebraska vs. Michigan"></div>
-    </form>
+	<div id="point_data" style="display:none;">
+    {
+      "team_one_coordinates": [
+        {% for tweet in team_one_tweets %}
+          [ {{ tweet.coordinates.lat }}, {{ tweet.coordinates.lon }} ]
+          {% if loop.index < team_one_tweets|length  %}
+            ,
+          {% endif %}
+        {% endfor %}
+      ],
+      "team_two_coordinates": [
+        {% for tweet in team_two_tweets %}
+          [ {{ tweet.coordinates.lat }}, {{ tweet.coordinates.lon }} ]
+          {% if loop.index < team_two_tweets|length  %}
+            ,
+          {% endif %}
+        {% endfor %}
+      ]
+    }
+  </div>
+    <div id="map-canvas"></div>
   </body>
 </html>
 {% endautoescape %}
