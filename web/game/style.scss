@@ -1,0 +1,456 @@
+/* FANHYPE GAME PAGE style.scss */
+/* reset */
+
+*, *:before, *:after {
+	-webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box; 
+	margin: 0;
+	padding: 0;
+}
+
+.content {
+	-webkit-box-sizing: content-box; 
+	-moz-box-sizing: content-box; 
+	box-sizing: content-box; 
+}
+
+html {
+	background: #fff;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	font-family: 'open sans', sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul, li {
+	list-style: none;
+}
+
+h1, h2, h3 {
+	font-family: 'Droid Serif', serif;
+	font-style: italic;
+	font-weight: 700;
+}
+
+/* variables */
+
+$link_color: #000;
+$hover_color: #f00;
+$oklahoma: #b20837;
+$baylor: #004933;
+$team_width: 200px;
+$bar_h: 30px;
+
+/* styles */
+
+a {
+	color: $link_color;
+
+	&:hover {
+		color: $hover_color;
+	}
+}
+
+nav {
+	width: 100%;
+	padding: 0 5%;
+	height: 60px;
+	background: #fff;
+
+	h1#mark {
+		display: inline-block;
+		padding: 18px;
+		font-size: 18px;
+		font-family: 'Droid Serif', serif;
+		font-style: italic;
+		font-weight: 700;
+	}
+
+	ul {
+		float: right;
+		padding-top: 22px;
+
+		li {
+			float: left;
+
+			a {
+				padding: 22px;
+				font-size: 11px;
+				letter-spacing: 1px;
+			}
+		}
+	}
+}
+
+hr {
+	margin: 0 auto;
+	width: 90%;
+	height: 1px;
+	background: #000;
+	border: 0;
+}
+
+div#game_info {
+	margin: 0 5%;
+	padding: 20px $team_width 0;
+	height: 240px;
+	clear: both;
+
+	.column {
+		position: relative;
+		float: left;
+		text-align: center;
+	}
+
+	div#info {
+		@extend .column;
+		width: 100%;
+		background: #fff;
+		height: 200px;
+
+		h1 {
+			padding-top: 30px;
+			font-size: 36px;
+			font-family: 'Droid Serif', serif;
+			font-style: italic;
+			font-weight: 700;
+		}
+
+		p {
+			font-size: 14px;
+			font-weight: 300;
+		}
+
+		div.bar {
+			display: block;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: $bar_h;
+			margin: 0 auto;
+			font-size: 12px;
+			font-weight: 300;
+			color: #fff;
+
+			.partial_bar {
+				position: absolute;
+				top: 0;
+				padding: 6px 6px;
+				height: $bar_h;
+				background: $baylor;
+			}
+
+			div.right {
+				@extend .partial_bar;
+				right: 0;
+				width: 100%;
+				text-align: right;
+				background: $baylor;
+			}
+
+			div.left {
+				@extend .partial_bar;
+				left: 0;
+				width: 50%;
+				text-align: left;
+				background: $oklahoma;
+
+				&:after {
+					position: absolute;
+				    top: 0;
+				    right: -4px;
+				    content: '';
+					width: 8px;
+					height: $bar_h; 
+					background: #fff;
+					border: 1px solid #000;
+				}
+			}
+		}
+	}
+
+	.team {
+		width: $team_width;
+	}
+
+	div#left_team {
+		@extend .column;
+		@extend .team;
+		margin-left: -100%;
+		right: $team_width;
+
+		img#left_logo {
+			float: left;
+		}
+	}
+
+	div#right_team {
+		@extend .column;
+		@extend .team;
+		margin-right: -$team_width;
+
+		img#right_logo {
+			float: left;
+		}
+	}
+}
+
+div.rule {
+	position: absolute;
+	left: 50%;
+	width: 1px;
+	height: 390px;
+	background: #000;
+}
+
+div.split {
+	height: 420px;
+	padding: 15px 5%;
+
+	h1 {
+		display: block;
+		height: 45px;
+		text-align: center;
+	}
+
+	.split_section {
+		float: left;
+		width: 50%;
+		height: 345px;
+	}
+
+	div#heat_map {
+		@extend .split_section;
+		padding-right: 15px;
+
+		div#map {
+			height: inherit;
+			/* delete this later */
+			padding-top: 110px;
+			text-align: center;
+			font-size: 60px;
+			font-family: 'Droid Serif', serif;
+			font-style: italic;
+			font-weight: 700;
+			color: #fff;
+			text-shadow: #000 0 0 8px;
+			background: url('http://i.imgur.com/OSbPV99.png?1') #eee;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			transition: ease-in-out all 1s;
+
+			&:hover {
+				background: url('http://i.imgur.com/OSbPV99.png') #ff3838;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				transition: ease-in-out all 1s;
+			}
+		}
+	}
+
+	div#stats {
+		@extend .split_section;
+		padding-left: 15px;
+
+		div#graph_wrapper {
+			float:left;
+			width: 60%;
+
+			div#graph_title {
+				height: 30px;
+
+				h2 {
+					text-align: center;
+				}
+
+			}
+
+			div#graph {
+				width: 100%;
+				height: 330px;
+			}
+		}
+
+		div#hashtags {
+			float:right;
+			width: 40%;
+			text-align: right;
+
+			h2 {
+				font-size: 18px
+			}
+
+			ul {
+				padding: 6px;
+
+				li {
+					padding: 3px;
+					font-weight: 300;
+
+					a {
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
+}
+
+div#top_tweets {
+	padding: 15px 5%;
+
+	h1 {
+		padding-bottom: 15px;
+		text-align: center;
+	}
+
+	.top_tweet {
+		width: 48%;
+		margin-bottom: 15px;
+		background: #fff;
+		border: 1px solid #000;
+
+		img {
+			width: 60px;
+			height: 60px;
+			margin: 15px 15px 0 15px;
+			float: left;
+		}
+
+		div.user_info {
+			height: 60px;
+			margin: 15px 15px 0 15px;
+			
+			p {
+				font-size: 12px;
+				font-weight: 300;
+			}
+
+			p.screen_name {
+				padding: 3px;
+				font-family: 'Droid Serif', serif;
+				font-size: 15px;
+				font-weight: 700;
+			}
+
+			p.right_info {
+				float: right;
+				text-align: right;
+			}
+		}
+
+		p.tweet_text {
+			padding: 9px 15px;
+			font-weight: 300;
+			font-size: 21px;
+
+			a {
+				text-decoration: underline;
+			}
+		}
+
+		h2 {
+			margin: 12px 15px;
+			text-align: right;
+		}
+	}
+
+	div#top_tweet_left {
+		@extend .top_tweet;
+		float: left;
+		
+	}
+
+	div#top_tweet_right {
+		@extend .top_tweet;
+		float: right;
+	}
+}
+
+div#stream {
+	padding: 15px 5%;
+	
+	h1 {
+		padding-bottom: 15px;
+		text-align: center;
+	}
+
+	.left {
+		float: left;
+		color: $oklahoma;
+	}
+
+	.right {
+		float: right;
+		color: $baylor;
+	}
+
+	div.stream_tweet {
+		display: block;
+		width: 80%;
+		margin-bottom: 15px;
+		background: #fff;
+		border: 1px solid #000;
+
+
+		img {
+			float: left;
+			width: 60px;
+			height: 60px;
+			margin: 15px;
+		}
+
+		div.user_info {
+			float: left;
+			width: 135px;
+			height: 60px;
+			margin: 15px;
+			
+			p {
+				font-size: 12px;
+				font-weight: 300;
+			}
+
+			p.screen_name {
+				padding: 3px;
+				font-family: 'Droid Serif', serif;
+				font-size: 15px;
+				font-weight: 700;
+			}
+
+			p.right_info {
+				float: right;
+				text-align: right;
+			}
+		}
+
+		p.tweet_text {
+			position: absolute;
+			width: 40%;
+			margin-left: 270px;
+			padding: 15px;
+			font-weight: 300;
+			font-size: 18px;
+
+			a {
+				text-decoration: underline;
+			}
+		}
+
+		h2 {
+			margin: 12px 15px;
+			text-align: right;
+		}
+	}
+}
