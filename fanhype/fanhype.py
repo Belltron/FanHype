@@ -78,10 +78,29 @@ class TweetScript(webapp2.RequestHandler):
                     appData.tweetText = tweetText
                     appData.put()   
 
+class Game(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('game.html')
+
+        tweet_query = Tweet.query()
+        tweets = tweet_query.fetch()
+
+        #Example separation of tweets into two teams' tweets.
+        team_one_tweets = [tweet for tweet in tweets if tweet.coordinates.lat > 40]
+        team_two_tweets = [tweet for tweet in tweets if tweet.coordinates.lat < 40]
+
+        template_values = {
+            'team_one_tweets': team_one_tweets,
+            'team_two_tweets': team_two_tweets
+        }
+        self.response.write(template.render(template_values))
+
 class SaveTweet(webapp2.RequestHandler):
     def get(self):
         lat = 39.8282
         lon = -98.5795
+        lat += random.randint(0,4) - 2
+        lon += random.randint(0,4) - 2                                                                                       
         new_tweet = Tweet()
         new_tweet.screen_name = 'Tweet'
         new_tweet.coordinates = ndb.GeoPt(lat, lon)
@@ -96,5 +115,6 @@ application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/gamehype', SingleGame),
     ('/cron', TweetScript),
+    ('/game', Game),
     ('/savetweet', SaveTweet),
 ], debug=True)

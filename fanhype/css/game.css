@@ -47,9 +47,13 @@ nav {
     display: inline-block;
     padding: 18px;
     font-size: 18px;
-    font-family: 'Droid Serif', serif;
+    font-family: 'Droid Serif', sans-serif;
     font-style: italic;
     font-weight: 700; }
+    nav h1#mark a {
+      color: black; }
+      nav h1#mark a:hover {
+        color: red; }
   nav ul {
     float: right;
     padding-top: 22px; }
@@ -58,7 +62,10 @@ nav {
       nav ul li a {
         padding: 22px;
         font-size: 11px;
-        letter-spacing: 1px; }
+        letter-spacing: 1px;
+        color: black; }
+        nav ul li a:hover {
+          color: red; }
 
 hr {
   margin: 0 auto;
