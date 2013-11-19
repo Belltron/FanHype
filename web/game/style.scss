@@ -230,32 +230,8 @@ div.split {
 		@extend .split_section;
 		padding-right: 15px;
 
-		div#map {
+		div#map_canvas {
 			height: inherit;
-			/* delete this later */
-			padding-top: 110px;
-			text-align: center;
-			font-size: 60px;
-			font-family: 'Droid Serif', serif;
-			font-style: italic;
-			font-weight: 700;
-			color: #fff;
-			text-shadow: #000 0 0 8px;
-			background: url('http://i.imgur.com/OSbPV99.png?1') #eee;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-			transition: ease-in-out all 1s;
-
-			&:hover {
-				background: url('http://i.imgur.com/OSbPV99.png') #ff3838;
-				-webkit-background-size: cover;
-				-moz-background-size: cover;
-				-o-background-size: cover;
-				background-size: cover;
-				transition: ease-in-out all 1s;
-			}
 		}
 	}
 
