@@ -11,6 +11,7 @@ from models import ApplicationData, Tweet
 import tweepy
 from tweepy import OAuthHandler
 import config
+from analyzer import GameHype
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -21,7 +22,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class MainPage(webapp2.RequestHandler):
         def get(self):
             template = JINJA_ENVIRONMENT.get_template('index.html')
-            
+            self.response.write(template.render())
+            """
             tweet_query = Tweet.query()
             tweets = tweet_query.fetch()
 
@@ -34,7 +36,7 @@ class MainPage(webapp2.RequestHandler):
                 'team_two_tweets': team_two_tweets
             }
             self.response.write(template.render(template_values))
-
+                """
 
 class SingleGame(webapp2.RequestHandler):
     def post(self):
@@ -82,14 +84,30 @@ class Game(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('game.html')
 
-        tweet_query = Tweet.query()
-        tweets = tweet_query.fetch()
+        tweets_query = ndb.gql('SELECT * FROM Tweet WHERE latitude != null')
+        tweets = tweets_query.fetch()
 
         #Example separation of tweets into two teams' tweets.
-        team_one_tweets = [tweet for tweet in tweets if tweet.coordinates.lat > 40]
-        team_two_tweets = [tweet for tweet in tweets if tweet.coordinates.lat < 40]
+        team_one_tweets = [tweet for tweet in tweets if  tweet.latitude > 40]
+        team_two_tweets = [tweet for tweet in tweets if  tweet.latitude < 40]
 
+        team_one_tags = ['everyoneinblack', 'sicou', 'baylor', 'sicem', 'sicembears']
+        team_two_tags = ['oklahoma','boomersooner', 'gosooners', 'beatbaylor']
+        game_tweets_query = ndb.gql('SELECT * FROM Tweet')
+        tweets = game_tweets_query.fetch()
+        gHype = GameHype(tweets, team_one_tags, team_two_tags)
+        
+        hypeTuple = gHype.getHype()
+        baylorTotal = hypeTuple[0]
+        baylorHype = hypeTuple[1]    
+    
+        oklahomaTotal = hypeTuple[2]
+        oklahomaHype = hypeTuple[3]
         template_values = {
+            'baylor_total': baylorTotal,
+            'baylor_hype': baylorHype,
+            'oklahoma_total': oklahomaTotal,
+            'oklahoma_hype': oklahomaHype,
             'team_one_tweets': team_one_tweets,
             'team_two_tweets': team_two_tweets
         }
@@ -97,13 +115,14 @@ class Game(webapp2.RequestHandler):
 
 class SaveTweet(webapp2.RequestHandler):
     def get(self):
-        lat = 39.8282
-        lon = -98.5795
+        lat = -83.74886513
+        lon = 42.26584491
         lat += random.randint(0,4) - 2
         lon += random.randint(0,4) - 2                                                                                       
         new_tweet = Tweet()
         new_tweet.screen_name = 'Tweet'
         new_tweet.coordinates = ndb.GeoPt(lat, lon)
+        new_tweet.hashTags = "beatbaylor"
         new_tweet.put()
         self.response.write('Added data point at: ('+str(lat)+', '+str(lon)+')')
 

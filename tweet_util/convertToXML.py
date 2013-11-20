@@ -28,9 +28,9 @@ def read_data(filename):
     return data
 
 if __name__=="__main__":
-    tweets = read_data(os.path.join(os.getcwd(),'tweets.json'))
+    tweets = read_data(os.path.join(os.getcwd(),'baylorOklahoma.json'))
     print "Tweet length: ", len(tweets)
-    fileName = "xmlGen.xml"
+    fileName = "baylorXml.xml"
     #doc = "<tweets>"
     with open(fileName, 'w') as outfile:
         outfile.write(json.dumps('<?xml version='+'"'+'1.0"'+'?>') + '\n') 
@@ -111,6 +111,17 @@ if __name__=="__main__":
             doc += "<friendsCount>"
             doc += str(friendsCount).encode('utf-8')
             doc += "</friendsCount>"
+            doc += "<latitude>"
+            if geo is not None:
+                doc += str(coordinates[0])
+            doc += "</latitude>"
+            doc += "<longitude>"
+            if geo is not None:
+                doc += str(coordinates[1])
+            doc += "</longitude>"
+            doc += "<game>baylorOklahoma</game>"
+
+            
             doc += "<date>2013-11-18T06:18:51</date>"
 
             doc += "</Tweet>"
@@ -118,12 +129,4 @@ if __name__=="__main__":
             outfile.write(json.dumps(doc) + '\n')
         #outfile.write("</tweets>")
         outfile.write(json.dumps("</Tweets>"))
-    """ 
-    doc += "</Tweets>"
-    
-    xml = (xml.dom.minidom.parseString(doc))
-    out = str(xml.toprettyxml(indent = '   '))
-    
-    with open(fileName, 'w') as outfile:
-        outfile.write(out)
-    """
+

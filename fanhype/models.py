@@ -12,9 +12,9 @@ class ApplicationData(ndb.Model):
 class Tweet(ndb.Model):
         coordinates = ndb.GeoPtProperty()
 	tweetText = ndb.StringProperty()	
-	hashTags = ndb.StringProperty(repeated=True)
+	hashTags = ndb.StringProperty()
 
-        createdAt = ndb.DateTimeProperty()
+        createdAt = ndb.StringProperty()
         favoriteCount = ndb.StringProperty()
         filterLevel = ndb.StringProperty()
         tweetId = ndb.StringProperty()
@@ -25,6 +25,9 @@ class Tweet(ndb.Model):
         verified = ndb.StringProperty()
         followersCount = ndb.StringProperty()
         friendsCount = ndb.StringProperty()
+        latitude = ndb.StringProperty()
+        longitude = ndb.StringProperty()
+        game = ndb.StringProperty()
 	
 	date = ndb.DateTimeProperty(auto_now_add=True)
         

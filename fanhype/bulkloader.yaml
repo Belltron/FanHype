@@ -37,13 +37,13 @@ transformers:
 
     - property: date
       external_name: date
-      # Type: Date/Time Stats: 11141 properties of this type in this kind.
+      # Type: Date/Time Stats: 11791 properties of this type in this kind.
       import_transform: transform.import_date_time('%Y-%m-%dT%H:%M:%S')
       export_transform: transform.export_date_time('%Y-%m-%dT%H:%M:%S')
 
     - property: tweetText
       external_name: tweetText
-      # Type: String Stats: 11141 properties of this type in this kind.
+      # Type: String Stats: 11791 properties of this type in this kind.
 
 
 - kind: Tweet
@@ -61,50 +61,69 @@ transformers:
       external_name: coordinates
       # Type: GeoPt Stats: 1 properties of this type in this kind.
 
+    - property: createdAt
+      external_name: createdAt
+      # Type: String Stats: 1670 properties of this type in this kind.
+
     - property: date
       external_name: date
-      # Type: Date/Time Stats: 1 properties of this type in this kind.
+      # Type: Date/Time Stats: 1672 properties of this type in this kind.
       import_transform: transform.import_date_time('%Y-%m-%dT%H:%M:%S')
       export_transform: transform.export_date_time('%Y-%m-%dT%H:%M:%S')
 
+    - property: favoriteCount
+      external_name: favoriteCount
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: filterLevel
+      external_name: filterLevel
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: followersCount
+      external_name: followersCount
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: friendsCount
+      external_name: friendsCount
+      # Type: String Stats: 1670 properties of this type in this kind.
+
     - property: hashTags
       external_name: hashTags
-      # Type: String Stats: 3 properties of this type in this kind.
+      # Type: String Stats: 717 properties of this type in this kind.
+
+    - property: lang
+      external_name: lang
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: profileImgURL
+      external_name: profileImgURL
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: retweetCount
+      external_name: retweetCount
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: screenName
+      external_name: screenName
+      # Type: String Stats: 1670 properties of this type in this kind.
+
+    - property: tweetId
+      external_name: tweetId
+      # Type: String Stats: 1670 properties of this type in this kind.
 
     - property: tweetText
       external_name: tweetText
-      # Type: String Stats: 1 properties of this type in this kind.
-  
-    - property: createdAt
-      external_name: createdAt
-  
-    - property: favoriteCount
-      external_name: favoriteCount
-  
-    - property: filterLevel
-      external_name: filterLevel
-  
-    - property: tweetId
-      external_name: tweetId
-  
-    - property: lang
-      external_name: lang
-  
-    - property: retweetCount
-      external_name: retweetCount
-  
-    - property: screenName
-      external_name: screenName
-  
-    - property: profileImgURL
-      external_name: profileImgURL
-  
+      # Type: String Stats: 1671 properties of this type in this kind.
+
     - property: verified
       external_name: verified
+      # Type: String Stats: 1670 properties of this type in this kind.
   
-    - property: followersCount
-      external_name: followersCount
+    - property: latitude
+      external_name: latitude
   
-    - property: friendsCount
-      external_name: friendsCount
-
+    - property: longitude
+      external_name: longitude
+  
+    - property: game
+      external_name: game

@@ -102,6 +102,10 @@
       </div>
       <div id="left_team">
         <img src="img/oklahoma_200.png" alt="oklahoma" id="left_logo">
+		{
+		  "oklahoma_total": {{ oklahoma_total }}
+		  "oklahoma_hype": {{ oklahoma_hype }}
+		}
       </div>
       <div id="right_team">
         <img src="img/baylor_200.png" alt="baylor" id="right_logo"></div>
@@ -114,7 +118,7 @@
             {
               "team_one_coordinates": [
                 {% for tweet in team_one_tweets %}
-                  [ {{ tweet.coordinates.lat }}, {{ tweet.coordinates.lon }} ]
+                  [ {{ tweet.latitude }}, {{ tweet.longitude }} ]
                   {% if loop.index < team_one_tweets|length  %}
                     ,
                   {% endif %}
