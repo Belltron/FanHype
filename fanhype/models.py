@@ -36,28 +36,17 @@ class HypeTable(ndb.Model):
     teamTwoName = ndb.StringProperty()
     teamOneTweetTotal = ndb.IntegerProperty()
     teamTwoTweetTotal = ndb.IntegerProperty()
-    """ #Sample data initialization
-        newHype = HypeTable()
-        newHype.teamOneHashTags = 'everyoneinblack,sicou,baylor,sicem,sicembears'
-        newHype.teamOneHype = 0
-        newHype.teamOneName = 'Baylor'
-        newHype.teamOneTweetTotal = 0
-        newHype.teamTwoHashTags = 'oklahoma,boomersooner,gosooners,beatbaylor,ou'
-        newHype.teamTwoHype = 0
-        newHype.teamTwoName = 'Oklahoma'
-        newHype.teamTwoTweetTotal = 0
-        newHype.put()
-    """
+    teamOneColor = ndb.StringProperty()
+    teamTwoColor = ndb.StringProperty()
+    teamOneImage = ndb.StringProperty()
+    teamTwoImage = ndb.StringProperty()
+    gameTitle = ndb.StringProperty()
+    gameTime = ndb.StringProperty()
+    gameLocation = ndb.StringProperty()
 
 class GeoData(ndb.Model):
     coordinates = ndb.StringProperty(indexed=False)
     teamName = ndb.StringProperty()
-    """ #Sample data initialization
-        newGeoData = GeoData()
-        newGeoData.coordinates = '-33.343,45.234|41.342,56.454|'
-        newGeoData.teamName = 'teamName'
-        newGeoData.put()
-    """
 
 class TopTweet(ndb.Model):
     teamName = ndb.StringProperty()
@@ -75,6 +64,28 @@ class LatestTweets(ndb.Model):
     hypeScore = ndb.StringProperty()
     createdAt = ndb.StringProperty()
     followerCount = ndb.StringProperty()
+
+def initializeModels():
+	newHype = HypeTable()
+	newHype.teamOneHashTags = 'everyoneinblack,sicou,baylor,sicem,sicembears'
+	newHype.teamOneHype = 0
+	newHype.teamOneName = 'Baylor'
+	newHype.teamOneTweetTotal = 0
+	newHype.teamTwoHashTags = 'oklahoma,boomersooner,gosooners,beatbaylor,ou'
+	newHype.teamTwoHype = 0
+	newHype.teamTwoName = 'Oklahoma'
+	newHype.teamTwoTweetTotal = 0
+	newHype.put()
+
+	newGeoData = GeoData()
+	newGeoData.coordinates = ''
+	newGeoData.teamName = 'Baylor'
+	newGeoData.put()
+
+	newGeoData = GeoData()
+	newGeoData.coordinates = ''
+	newGeoData.teamName = 'Oklahoma'
+	newGeoData.put()
 
 """
     Point class is used to render latitude/longitude values to the

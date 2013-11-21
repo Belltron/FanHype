@@ -90,9 +90,9 @@
   <div id="content">
     <div id="game_info">
       <div id="info">
-        <h1>Oklahoma @ Baylor</h1>
-        <p>Thursday, November 7, 6:30 PM (CT)<br>
-          Floyd Casey Stadium, Waco, Texas</p>
+        <h1>{{game_title}}</h1>
+        <p>{{game_time}}<br>
+          {{game_location}}</p>
         <span></span>
         <span></span>
         <div class="bar">
@@ -101,10 +101,10 @@
         </div>
       </div>
       <div id="left_team">
-        <img src="img/oklahoma_200.png" alt="oklahoma" id="left_logo">
+        <img src="{{team_one_image}}" alt="{{ team_one_name }}" id="left_logo">
       </div>
       <div id="right_team">
-        <img src="img/baylor_200.png" alt="baylor" id="right_logo"></div>
+        <img src="{{team_two_image}}" alt="{{ team_two_name }}" id="right_logo"></div>
       </div>
     <hr>
     <div class="split">
@@ -137,16 +137,16 @@
         </div>
         <div id="hashtags">
           <ul>
-            <h2>Oklahoma Hashtags</h2>
-            <li><a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a></li>
-            <li><a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a></li>
+            <h2>{{ team_one_name }} Hashtags</h2>
+            {% for hashtag in team_one_hashtags %}
+              <li><a href="https://twitter.com/search?q=%23{{ hashtag }}">#{{ hashtag }}</a></li>
+            {% endfor %}
           </ul>
           <ul>
-            <h2>Baylor Hashtags</h2>
-            <li><a href="https://twitter.com/search?q=%23sicou">#sicou</a></li>
-            <li><a href="https://twitter.com/search?q=%23sicem">#sicem</a></li>
-            <li><a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a></li>
-            <li><a href="https://twitter.com/search?q=%23watchbu">#watchbu</a></li>
+            <h2>{{ team_two_name }} Hashtags</h2>
+            {% for hashtag in team_two_hashtags %}
+              <li><a href="https://twitter.com/search?q=%23{{ hashtag }}">#{{ hashtag }}</a></li>
+            {% endfor %}
           </ul>
         </div>
       </div>
@@ -299,7 +299,7 @@
                   text: null
               },
               xAxis: {
-                  categories: ['Oklahoma', 'Baylor'],
+                  categories: ['Oklahoma', '{{team_one_name}}'],
                   color: '#000000',
                   title: {
                       text: null
@@ -342,13 +342,13 @@
               series: [{
                 name: 'Tweets',
                   data: [{
-            name: 'Oklahoma',
-            color: '#b20837',
-            y: {{ team_two_total }}
-          }, {
-            name: 'Baylor',
-            color: '#004933',
+            name: '{{team_one_name}}',
+            color: '{{team_one_color}}',
             y: {{ team_one_total }}
+          }, {
+            name: '{{team_two_name}}',
+            color: '{{team_two_color}}',
+            y: {{ team_two_total }}
           }]
               }]
           });

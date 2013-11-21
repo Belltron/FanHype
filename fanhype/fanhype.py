@@ -13,12 +13,14 @@ import tweepy
 from tweepy import OAuthHandler
 import config
 import analyzer
+import newgame
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -73,7 +75,10 @@ class Game(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('game.html')
 
-        hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == 'Baylor', models.HypeTable.teamOneName == 'Oklahoma')).fetch()[0]
+        team_one_name = self.request.get('one')
+        team_two_name = self.request.get('two')
+
+        hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()[0]
 
         team_one_coordinates = models.GeoData.query(models.GeoData.teamName == hypeTable.teamOneName).fetch()[0].coordinates.split('|')
         team_two_coordinates = models.GeoData.query(models.GeoData.teamName == hypeTable.teamTwoName).fetch()[0].coordinates.split('|')
@@ -82,11 +87,21 @@ class Game(webapp2.RequestHandler):
         team_two_points = [models.Point(point) for point in team_two_coordinates]
 
         template_values = {
+            'game_title': hypeTable.gameTitle,
+            'game_time': hypeTable.gameTime,
+            'game_location': hypeTable.gameLocation,
+            'team_one_color': hypeTable.teamOneColor,
+            'team_two_color': hypeTable.teamTwoColor,
+            'team_one_name': hypeTable.teamOneName,
+            'team_two_name': hypeTable.teamTwoName,
             'team_one_total': hypeTable.teamOneTweetTotal,
-            'team_one_hype': hypeTable.teamOneHype,
             'team_two_total': hypeTable.teamTwoTweetTotal,
+            'team_one_hype': hypeTable.teamOneHype,
             'team_two_hype': hypeTable.teamTwoHype,
-            'team_one_hashtags': hypeTable.teamOneHashTags,
+            'team_one_image': hypeTable.teamOneImage,
+            'team_two_image': hypeTable.teamTwoImage,
+            'team_one_hashtags': hypeTable.teamOneHashTags.split(','),
+            'team_two_hashtags': hypeTable.teamTwoHashTags.split(','),
             'team_one_tweets': team_one_points,
             'team_two_tweets': team_two_points
         }
@@ -94,20 +109,24 @@ class Game(webapp2.RequestHandler):
 
 
 class SaveTweet(webapp2.RequestHandler):
+    def get(self):
+        models.initializeModels()
+        print "Initialized models"
+
     def post(self):        
         tweets = json.loads(self.request.body)
         hypeTables = models.HypeTable.query().fetch()
         geoData = models.GeoData.query().fetch()
 
         #This code used for resetting all values
-        """for row in geoData:
+        for row in geoData:
             row.coordinates = ""
 
         for row in hypeTables:
             row.teamOneHype = 0
             row.teamTwoHype = 0
             row.teamOneTweetTotal = 0
-            row.teamTwoTweetTotal = 0"""
+            row.teamTwoTweetTotal = 0
 
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
@@ -141,5 +160,6 @@ application = webapp2.WSGIApplication([
     ('/gamehype', SingleGame),
     ('/cron', TweetScript),
     ('/game', Game),
-    ('/savetweet', SaveTweet)
+    ('/savetweet', SaveTweet),
+    ('/newgame', newgame.NewGame)
 ], debug=True)

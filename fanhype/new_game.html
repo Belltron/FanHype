@@ -1,0 +1,25 @@
+{% autoescape true %}
+
+<html>
+	<body>
+		<form action="/newgame" method="post">
+
+    		Team one name: <input type="text" name="teamOneName"><br>
+    		Team one hashtags: <input type="text" name="teamOneHashtags"><br>
+    		Team one color (Hex value): <input type="text" name="teamOneColor"><br>
+    		Team one logo image: <input type="text" name="teamOneImage"><br>
+    		Team two name: <input type="text" name="teamTwoName"><br>
+    		Team two hashtags: <input type="text" name="teamTwoHashtags"><br>
+    		Team two color (Hex value): <input type="text" name="teamTwoColor"><br>
+    		Team two logo image: <input type="text" name="teamTwoImage"><br>
+
+    		Game Title (Ex: "Baylor @ Oklahoma): <input type="text" name="gameTitle"><br>
+    		Game Time (Ex: "Thursday, November 7, 6:30 PM (CT)"): <input type="text" name="gameTime"><br>
+    		Game Location (Ex: "Floyd Casey Stadium, Waco, Texas"): <input type="text" name="gameLocation"><br>
+	    	<div><input type="submit" value="Create New Game"></div>
+
+		</form>
+	</body>
+</html>
+
+{% endautoescape %}
