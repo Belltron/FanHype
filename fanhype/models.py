@@ -1,7 +1,6 @@
 from google.appengine.ext import ndb
 class ApplicationData(ndb.Model):
     tweetText = ndb.StringProperty()
-    #tweetTextList = ndb.StringProperty(repeated = True)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
     @classmethod
@@ -37,7 +36,7 @@ class HypeTable(ndb.Model):
     teamTwoName = ndb.StringProperty()
     teamOneTweetTotal = ndb.IntegerProperty()
     teamTwoTweetTotal = ndb.IntegerProperty()
-    """
+    """ #Sample data initialization
         newHype = HypeTable()
         newHype.teamOneHashTags = 'everyoneinblack,sicou,baylor,sicem,sicembears'
         newHype.teamOneHype = 0
@@ -51,21 +50,46 @@ class HypeTable(ndb.Model):
     """
 
 class GeoData(ndb.Model):
-    coordinates = ndb.StringProperty()
+    coordinates = ndb.StringProperty(indexed=False)
     teamName = ndb.StringProperty()
-    """
+    """ #Sample data initialization
         newGeoData = GeoData()
         newGeoData.coordinates = '-33.343,45.234|41.342,56.454|'
         newGeoData.teamName = 'teamName'
         newGeoData.put()
     """
 
+class TopTweet(ndb.Model):
+    teamName = ndb.StringProperty()
+    imageUrl = ndb.StringProperty()
+    tweetText = ndb.StringProperty()
+    userName = ndb.StringProperty()
+    hypeScore = ndb.StringProperty()
+    followerCount = ndb.StringProperty()
+
+class LatestTweets(ndb.Model):
+    teamName = ndb.StringProperty()
+    imageUrl = ndb.StringProperty()
+    tweetText = ndb.StringProperty()
+    userName = ndb.StringProperty()
+    hypeScore = ndb.StringProperty()
+    createdAt = ndb.StringProperty()
+    followerCount = ndb.StringProperty()
+
+"""
+    Point class is used to render latitude/longitude values to the
+        html for the heatmap to use. This model isn't stored in the
+        datastore.
+"""
+class Point(object):
+    def __init__(self, lat_lon_string):
+        if len(lat_lon_string) > 0:
+            lat_lon   = lat_lon_string.split(',')
+            self.longitude  = lat_lon[0]
+            self.latitude = lat_lon[1]
+        else:
+            self.longitude = 0
+            self.latitude = 0
 
 
 
-
-
-
-
-
-        
