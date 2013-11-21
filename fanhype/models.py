@@ -30,4 +30,35 @@ class Tweet(ndb.Model):
         game = ndb.StringProperty()
 	
 	date = ndb.DateTimeProperty(auto_now_add=True)
+
+class HypeTable(ndb.Model):
+    teamOneName = ndb.StringProperty()
+    teamOneHype = ndb.StringProperty()
+    teamOneTweetTotal = ndb.StringProperty()
+    teamOneHashTags = ndb.StringProperty()
+    teamTwoName = ndb.StringProperty()
+    teamTwoHype = ndb.StringProperty()
+    teamTwoTweetTotal = ndb.StringProperty()
+    teamTwoHashTags = ndb.StringProperty()
+
+class GeoData(ndb.Model):
+    teamName = ndb.StringProperty()
+    coordinates = ndb.StringProperty()
+
+class TopTweet(ndb.Model):
+    teamName = ndb.StringProperty()
+    imageUrl = ndb.StringProperty()
+    tweetText = ndb.StringProperty()
+    userName = ndb.StringProperty()
+    hypeScore = ndb.StringProperty()
+    followerCount = ndb.StringProperty()
+
+class LatestTweets(ndb.Model):
+    teamName = ndb.StringProperty()
+    imageUrl = ndb.StringProperty()
+    tweetText = ndb.StringProperty()
+    userName = ndb.StringProperty()
+    hypeScore = ndb.StringProperty()
+    createdAt = ndb.StringProperty()
+    followerCount = ndb.StringProperty()
         
