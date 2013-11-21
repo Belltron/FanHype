@@ -61,8 +61,12 @@ class GameHype(object):
                     outfile.write(json.dumps(tweet) + '\n')
                     
         self.total = self.teamOneTotal + self.teamTwoTotal
-        teamOneHype = float(self.teamOneTotal) / self.total * 100
-        teamTwoHype = float(self.teamTwoTotal) / self.total * 100
+        if self.total != 0:
+            teamOneHype = float(self.teamOneTotal) / self.total * 100
+            teamTwoHype = float(self.teamTwoTotal) / self.total * 100
+        else:
+            teamOneHype = 0
+            teamTwoHype = 0        
         
         return (self.teamOneTotal, teamOneHype, self.teamTwoTotal, teamTwoHype)
         

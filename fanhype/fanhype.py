@@ -3,15 +3,17 @@ import cgi
 import jinja2
 import os
 import random
-from google.appengine.ext import ndb
+import json
+from google.appengine.ext import ndb, db
 import jinja2
 import os
 from query_tweet_collector import TweetCollector
-from models import ApplicationData, Tweet
+from models import ApplicationData, Tweet, HypeTable, GeoData
 import tweepy
 from tweepy import OAuthHandler
 import config
-from analyzer import GameHype
+#from analyzer import GameHype
+import analyzer
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -95,9 +97,9 @@ class Game(webapp2.RequestHandler):
         team_two_tags = ['oklahoma','boomersooner', 'gosooners', 'beatbaylor']
         game_tweets_query = ndb.gql('SELECT * FROM Tweet')
         tweets = game_tweets_query.fetch()
-        gHype = GameHype(tweets, team_one_tags, team_two_tags)
         
-        hypeTuple = gHype.getHype()
+        hypeTuple = analyzer.calculateHype(tweets, team_one_tags, team_two_tags)
+        
         baylorTotal = hypeTuple[0]
         baylorHype = hypeTuple[1]    
     
@@ -126,9 +128,31 @@ class SaveTweet(webapp2.RequestHandler):
         new_tweet.put()
         self.response.write('Added data point at: ('+str(lat)+', '+str(lon)+')')
 
-                #appData = ApplicationData()
-                #appData.tweetText = tweetText
-                #appData.put()   
+    def post(self):
+
+        tweets = json.loads(self.request.body)
+        hypeTables = HypeTable.query().fetch()
+
+        newTweetsTeamOne = []
+        newTweetsTeamTwo = []
+
+        for tweet in tweets:
+            for hypeTable in hypeTables:
+                for hashtag in tweet['entities']['hashtags']:
+                    if hashtag['text'] in hypeTable.teamOneHashTags:
+                        hypeScore = analyzer.calculateHype([tweet], hypeTable.teamOneHashTags, HypeTable.teamTwoHashTags)
+                        #print "Hype Score: " + str(hypeScore[1])
+                    if hashtag['text'] in hypeTable.teamTwoHashTags:
+                        hypeScore = analyzer.calculateHype([tweet], hypeTable.teamTwoHashTags, HypeTable.teamOneHashTags)
+                        #print "Hype Score: " + str(hypeScore[1])
+
+        
+
+        #q = GeoData.query(GeoData.teamName == 'Oklahoma')
+        #print str(q.fetch())
+        
+
+
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
