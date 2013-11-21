@@ -1,24 +1,65 @@
 {% autoescape true %}
 
 <html>
+
+	<head>
+		<link href='css/game.css' rel='stylesheet' type='text/css'>
+	</head>
 	<body>
-		<form action="/newgame" method="post">
+		{% for game in games %}
+			<div id="game_info">
+				<div id="info">
+					<h1>{{game.gameTitle}}</h1>
+					<p>{{game.gameTime}}<br>
+					{{game.gameLocation}}</p>
+					<span></span>
+					<span></span>
+					<div class="bar">
+						<div class="right">{{game.teamOneHashTags}}</div>
+						<div class="left">{{game.teamTwoHashTags}}</div>
+					</div>
+				</div>
+				<div id="left_team">
+					<img src="{{game.teamOneImage}}" alt="{{ game.teamOneName }}" id="left_logo">
+				</div>
+				<div id="right_team">
+					<img src="{{game.teamTwoImage}}" alt="{{ game.teamTwoName }}" id="right_logo">
+				</div>
+			</div>
+			<div style="text-align:center;">
+				<form action="/deletegame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
+					<button class="submit_button" type="submit">Delete this game</button>
+				</form>
+			</div>
+			<br />
+		    <hr>
+		    <br />
+	    {% endfor %}
+		
+	    <div style="text-align:center;">
+		    <h2>Create a new game</h2>
+			<form action="/newgame" method="post">
 
-    		Team one name: <input type="text" name="teamOneName"><br>
-    		Team one hashtags: <input type="text" name="teamOneHashtags"><br>
-    		Team one color (Hex value): <input type="text" name="teamOneColor"><br>
-    		Team one logo image: <input type="text" name="teamOneImage"><br>
-    		Team two name: <input type="text" name="teamTwoName"><br>
-    		Team two hashtags: <input type="text" name="teamTwoHashtags"><br>
-    		Team two color (Hex value): <input type="text" name="teamTwoColor"><br>
-    		Team two logo image: <input type="text" name="teamTwoImage"><br>
+	    		<div style="width:50%; float:left;">
+		    		<p>Team one name:</p><input type="text" name="teamOneName"><br><br>
+		    		<p>Team one hashtags:</p><input type="text" name="teamOneHashtags"><br><br>
+		    		<p>Team one color (Hex value):</p> <input type="text" name="teamOneColor"><br><br>
+		    		<p>Team one logo image:</p><input type="text" name="teamOneImage"><br><br>
+	    		</div>
+	    		<div style="width:50%; float:right;">
+		    		<p>Team two name:</p> <input type="text" name="teamTwoName"><br><br>
+		    		<p>Team two hashtags:</p><input type="text" name="teamTwoHashtags"><br><br>
+		    		<p>Team two color (Hex value):</p><input type="text" name="teamTwoColor"><br><br>
+		    		<p>Team two logo image:</p><input type="text" name="teamTwoImage"><br><br>
+		    	</div>
+	    		<p>Game Title (Ex: "Baylor @ Oklahoma):</p><input type="text" name="gameTitle"><br><br>
+	    		<p>Game Time (Ex: "Thursday, November 7, 6:30 PM (CT)"):</p><input type="text" name="gameTime"><br><br>
+	    		<p>Game Location (Ex: "Floyd Casey Stadium, Waco, Texas"):</p><input type="text" name="gameLocation"><br><br>
+		    	<button class="submit_button" type="submit">Create New Game</button>
 
-    		Game Title (Ex: "Baylor @ Oklahoma): <input type="text" name="gameTitle"><br>
-    		Game Time (Ex: "Thursday, November 7, 6:30 PM (CT)"): <input type="text" name="gameTime"><br>
-    		Game Location (Ex: "Floyd Casey Stadium, Waco, Texas"): <input type="text" name="gameLocation"><br>
-	    	<div><input type="submit" value="Create New Game"></div>
-
-		</form>
+			</form>
+			<br />
+		</div>
 	</body>
 </html>
 

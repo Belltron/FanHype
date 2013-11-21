@@ -13,7 +13,7 @@ import tweepy
 from tweepy import OAuthHandler
 import config
 import analyzer
-import newgame
+import game_control
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -25,7 +25,11 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class MainPage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('index.html')
-        self.response.write(template.render())
+
+        games = models.HypeTable.query().fetch()
+        template_values = {'games': games}
+        self.response.write(template.render(template_values))
+
 
 
 class SingleGame(webapp2.RequestHandler):
@@ -119,14 +123,14 @@ class SaveTweet(webapp2.RequestHandler):
         geoData = models.GeoData.query().fetch()
 
         #This code used for resetting all values
-        for row in geoData:
+        """for row in geoData:
             row.coordinates = ""
 
         for row in hypeTables:
             row.teamOneHype = 0
             row.teamTwoHype = 0
             row.teamOneTweetTotal = 0
-            row.teamTwoTweetTotal = 0
+            row.teamTwoTweetTotal = 0"""
 
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
@@ -161,5 +165,6 @@ application = webapp2.WSGIApplication([
     ('/cron', TweetScript),
     ('/game', Game),
     ('/savetweet', SaveTweet),
-    ('/newgame', newgame.NewGame)
+    ('/newgame', game_control.NewGame),
+    ('/deletegame', game_control.DeleteGame)
 ], debug=True)

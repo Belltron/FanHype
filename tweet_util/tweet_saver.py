@@ -32,5 +32,6 @@ stanford_oregon = ['#gostanford', '#beatou', '#beatoregon', '#stanford',  '#ou',
 baylor_oklahoma = ['#Baylor', '#SicEm', '#SicEmBears', '#WatchBU', '#EveryoneInBlack', '#SicOU', '#Sooners', '#BeatBaylor', '#BoomerSooner', '#gosooners']	
 tamu_msstate = ['#gigem', '#aggies', '12thMan', '#mississippistate', '#hailstate', '#msstate']
 nebraska_michigan = ['nebraska', 'huskers', 'gobigred', 'cornhusker', 'michigan', 'goblue','bighouse','beatnebraska','wolverines']
+ucf_rutgers = ['rutgers', 'chopucf', 'mycjsunday', 'ucf', 'ucfblackout', 'chargeon', 'beatrutgers']
 
-stream.filter(track=nebraska_michigan)
+stream.filter(track=ucf_rutgers)
