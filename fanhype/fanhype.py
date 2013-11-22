@@ -119,6 +119,8 @@ class SaveTweet(webapp2.RequestHandler):
 
     def post(self):        
         tweets = json.loads(self.request.body)
+        if len(tweets) == 0:
+            return;
         hypeTables = models.HypeTable.query().fetch()
         geoData = models.GeoData.query().fetch()
 
@@ -136,16 +138,29 @@ class SaveTweet(webapp2.RequestHandler):
             team_one_tags = hypeTable.teamOneHashTags.split(',')
             team_two_tags = hypeTable.teamTwoHashTags.split(',')
             for tweet in tweets:
+                tweet['hypescore'] = 0
+                tweet['teamname'] = ""
                 for hashtag in tweet['entities']['hashtags']:
                     hypeScore = analyzer.calculateHypeJson([tweet], team_one_tags, team_two_tags)
                     if hashtag['text'].lower() in team_one_tags:
                         hypeTable.teamOneHype += hypeScore[1]
+                        tweet['hypescore'] = hypeScore[1]
+                        tweet['teamname'] = hypeTable.teamOneName
                         hypeTable.teamOneTweetTotal += 1
                         addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
-                    if hashtag['text'].lower() in team_two_tags:
+                    elif hashtag['text'].lower() in team_two_tags:
                         hypeTable.teamTwoHype += hypeScore[3]
+                        tweet['hypescore'] = hypeScore[3]
+                        tweet['teamname'] = hypeTable.teamTwoName
                         hypeTable.teamTwoTweetTotal += 1
                         addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
+
+        #Find the top tweet of the new tweets
+        for hypeTable in hypeTables:
+            team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
+            calculateTopTweet(team_one_game_tweets)
+            team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
+            calculateTopTweet(team_two_game_tweets)
 
         [row.put() for row in geoData];
         [row.put() for row in hypeTables];
@@ -156,6 +171,29 @@ def addTweetCoordinates(tweet, geoData, teamName):
         for data in geoData:
             if data.teamName == teamName:
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
+
+def calculateTopTweet(tweets):
+    if tweets:
+        top_tweet = tweets[0]
+        for tweet in tweets:
+            if 'hypescore' in tweet and tweet['hypescore'] > top_tweet['hypescore']:
+                top_tweet = tweet
+        
+        topTweet = models.TopTweet.query(models.TopTweet.teamName == top_tweet['teamname']).fetch();
+        if len(topTweet) == 0:
+            topTweet = models.TopTweet()
+        else:
+            topTweet = topTweet[0]
+            if float(topTweet.hypeScore) >= float(top_tweet['hypescore']):
+                return;
+        
+        topTweet.teamName = top_tweet['teamname']
+        topTweet.imageUrl = top_tweet['user']['profile_img_url']
+        topTweet.tweetText = top_tweet['text']
+        topTweet.userName = top_tweet['user']['screen_name']
+        topTweet.hypeScore = str(top_tweet['hypescore'])
+        topTweet.followerCount = str(top_tweet['user']['followers_count'])
+        topTweet.put()
 
 
 
