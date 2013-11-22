@@ -54,6 +54,7 @@ class TopTweet(ndb.Model):
     tweetText = ndb.StringProperty()
     userName = ndb.StringProperty()
     hypeScore = ndb.StringProperty()
+    createdAt = ndb.StringProperty()
     followerCount = ndb.StringProperty()
 
 class LatestTweets(ndb.Model):

@@ -134,12 +134,14 @@ class SaveTweet(webapp2.RequestHandler):
             row.teamOneTweetTotal = 0
             row.teamTwoTweetTotal = 0"""
 
+        for tweet in tweets:
+            tweet['hypescore'] = 0
+            tweet['teamname'] = ""
+
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
             team_two_tags = hypeTable.teamTwoHashTags.split(',')
             for tweet in tweets:
-                tweet['hypescore'] = 0
-                tweet['teamname'] = ""
                 for hashtag in tweet['entities']['hashtags']:
                     hypeScore = analyzer.calculateHypeJson([tweet], team_one_tags, team_two_tags)
                     if hashtag['text'].lower() in team_one_tags:
@@ -158,8 +160,10 @@ class SaveTweet(webapp2.RequestHandler):
         #Find the top tweet of the new tweets
         for hypeTable in hypeTables:
             team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
+            print str(len(team_one_game_tweets))
             calculateTopTweet(team_one_game_tweets)
             team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
+            print str(len(team_two_game_tweets))
             calculateTopTweet(team_two_game_tweets)
 
         [row.put() for row in geoData];
@@ -175,17 +179,19 @@ def addTweetCoordinates(tweet, geoData, teamName):
 def calculateTopTweet(tweets):
     if tweets:
         top_tweet = tweets[0]
+        
         for tweet in tweets:
             if 'hypescore' in tweet and tweet['hypescore'] > top_tweet['hypescore']:
                 top_tweet = tweet
-        
+        print "top tweet score: " + str(top_tweet['hypescore'])
         topTweet = models.TopTweet.query(models.TopTweet.teamName == top_tweet['teamname']).fetch();
         if len(topTweet) == 0:
             topTweet = models.TopTweet()
         else:
             topTweet = topTweet[0]
             if float(topTweet.hypeScore) >= float(top_tweet['hypescore']):
-                return;
+                print "current top: " + str(topTweet.hypeScore) + " new: " + str(top_tweet['hypescore']) + " team: "+str(top_tweet['teamname'])
+                return
         
         topTweet.teamName = top_tweet['teamname']
         topTweet.imageUrl = top_tweet['user']['profile_img_url']
@@ -193,6 +199,7 @@ def calculateTopTweet(tweets):
         topTweet.userName = top_tweet['user']['screen_name']
         topTweet.hypeScore = str(top_tweet['hypescore'])
         topTweet.followerCount = str(top_tweet['user']['followers_count'])
+        topTweet.createdAt = top_tweet['created_at']
         topTweet.put()
 
 
