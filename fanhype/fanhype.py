@@ -177,25 +177,19 @@ class SaveTweet(webapp2.RequestHandler):
 def addTweetCoordinates(tweet, geoData, teamName):
     if 'coordinates' in tweet and tweet['coordinates']:
         coordinates = tweet['coordinates']['coordinates']
-        for data in geoData:
-            if data.teamName == teamName:
-                data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
+        data = [data for data in geoData if data.teamName == teamName]
+        data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
 
 def calculateTopTweet(tweets):
-    if tweets:
-        top_tweet = tweets[0]
-        
-        for tweet in tweets:
-            if 'hypescore' in tweet and tweet['hypescore'] > top_tweet['hypescore']:
-                top_tweet = tweet
-        print "top tweet score: " + str(top_tweet['hypescore'])
+    top_tweet = max(tweets, key=lambda x:x['hypescore'])
+    if top_tweet:
         topTweet = models.TopTweet.query(models.TopTweet.teamName == top_tweet['teamname']).fetch();
+        
         if len(topTweet) == 0:
             topTweet = models.TopTweet()
         else:
             topTweet = topTweet[0]
             if float(topTweet.hypeScore) >= float(top_tweet['hypescore']):
-                print "current top: " + str(topTweet.hypeScore) + " new: " + str(top_tweet['hypescore']) + " team: "+str(top_tweet['teamname'])
                 return
         
         topTweet.teamName = top_tweet['teamname']
