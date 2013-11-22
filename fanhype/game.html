@@ -176,10 +176,8 @@
         <img src="{{ team_one_top.imageUrl }}" alt="{{ team_one_top.userName }}">
         <div class="user_info">
           <p class="screen_name"><a href="https://twitter.com/{{ team_one_top.userName }}">@{{ team_one_top.userName }}</a></p>
-          <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
-            [-97.14821387,31.53009687]</p>
-          <p>Followers: 302</p>
-          <p>Friends: 131</p>
+          <p class="right_info">{{team_one_top.createdAt}}<br/></p>
+          <p>Followers: {{team_one_top.followerCount}}</p>
 
         </div>
         <p class="tweet_text">
@@ -192,10 +190,8 @@
         <img src="{{ team_two_top.imageUrl }}" alt="{{ team_two_top.userName }}">
         <div class="user_info">
           <p class="screen_name"><a href="https://twitter.com/{{ team_two_top.userName }}">@{{ team_two_top.userName }}</a></p>
-          <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
-            [-97.14821387,31.53009687]</p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
+          <p class="right_info">{{team_two_top.createdAt}}<br/></p>
+          <p>Followers: {{team_two_top.followerCount}}</p>
 
         </div>
         <p class="tweet_text">{{ team_two_top.tweetText }}
