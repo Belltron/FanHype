@@ -90,25 +90,21 @@
   <div id="content">
     <div id="game_info">
       <div id="info">
-        <h1>Oklahoma @ Baylor</h1>
-        <p>Thursday, November 7, 6:30 PM (CT)<br>
-          Floyd Casey Stadium, Waco, Texas</p>
+        <h1>{{game_title}}</h1>
+        <p>{{game_time}}<br>
+          {{game_location}}</p>
         <span></span>
         <span></span>
         <div class="bar">
-          <div class="right">50%</div>
-          <div class="left">50%</div>
+          <div class="right" style="background:{{ team_two_color }};">{{ team_two_hype }}</div>
+          <div class="left" style="background:{{ team_one_color }};">{{ team_one_hype }}</div>
         </div>
       </div>
       <div id="left_team">
-        <img src="img/oklahoma_200.png" alt="oklahoma" id="left_logo">
-		{
-		  "oklahoma_total": {{ oklahoma_total }}
-		  "oklahoma_hype": {{ oklahoma_hype }}
-		}
+        <img src="{{team_one_image}}" alt="{{ team_one_name }}" id="left_logo">
       </div>
       <div id="right_team">
-        <img src="img/baylor_200.png" alt="baylor" id="right_logo"></div>
+        <img src="{{team_two_image}}" alt="{{ team_two_name }}" id="right_logo"></div>
       </div>
     <hr>
     <div class="split">
@@ -119,17 +115,13 @@
               "team_one_coordinates": [
                 {% for tweet in team_one_tweets %}
                   [ {{ tweet.latitude }}, {{ tweet.longitude }} ]
-                  {% if loop.index < team_one_tweets|length  %}
-                    ,
-                  {% endif %}
+                  {% if loop.index < team_one_tweets|length  %},{% endif %}
                 {% endfor %}
               ],
               "team_two_coordinates": [
                 {% for tweet in team_two_tweets %}
-                  [ {{ tweet.coordinates.lat }}, {{ tweet.coordinates.lon }} ]
-                  {% if loop.index < team_two_tweets|length  %}
-                    ,
-                  {% endif %}
+                  [ {{ tweet.latitude }}, {{ tweet.longitude }} ]
+                  {% if loop.index < team_two_tweets|length  %},{% endif %}
                 {% endfor %}
               ]
             }
@@ -145,16 +137,16 @@
         </div>
         <div id="hashtags">
           <ul>
-            <h2>Oklahoma Hashtags</h2>
-            <li><a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a></li>
-            <li><a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a></li>
+            <h2>{{ team_one_name }} Hashtags</h2>
+            {% for hashtag in team_one_hashtags %}
+              <li><a href="https://twitter.com/search?q=%23{{ hashtag }}">#{{ hashtag }}</a></li>
+            {% endfor %}
           </ul>
           <ul>
-            <h2>Baylor Hashtags</h2>
-            <li><a href="https://twitter.com/search?q=%23sicou">#sicou</a></li>
-            <li><a href="https://twitter.com/search?q=%23sicem">#sicem</a></li>
-            <li><a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a></li>
-            <li><a href="https://twitter.com/search?q=%23watchbu">#watchbu</a></li>
+            <h2>{{ team_two_name }} Hashtags</h2>
+            {% for hashtag in team_two_hashtags %}
+              <li><a href="https://twitter.com/search?q=%23{{ hashtag }}">#{{ hashtag }}</a></li>
+            {% endfor %}
           </ul>
         </div>
       </div>
@@ -307,7 +299,7 @@
                   text: null
               },
               xAxis: {
-                  categories: ['Oklahoma', 'Baylor'],
+                  categories: ['Oklahoma', '{{team_one_name}}'],
                   color: '#000000',
                   title: {
                       text: null
@@ -350,25 +342,33 @@
               series: [{
                 name: 'Tweets',
                   data: [{
-            name: 'Oklahoma',
-            color: '#b20837',
-            y: 4218
+            name: '{{team_one_name}}',
+            color: '{{team_one_color}}',
+            y: {{ team_one_total }}
           }, {
-            name: 'Baylor',
-            color: '#004933',
-            y: 9428
+            name: '{{team_two_name}}',
+            color: '{{team_two_color}}',
+            y: {{ team_two_total }}
           }]
               }]
           });
+
+
+        $('.bar').each(function(){
+          var teamOne = parseFloat($(this).find('.left').text());
+          var teamTwo = parseFloat($(this).find('.right').text());
+          var fullWidth = $(this).width();
+          var percentage = (teamOne / (teamOne + teamTwo)) * 100;
+          var teamOnePercentage = Math.floor(percentage);
+          var teamTwoPercentage = 100-teamOnePercentage;
+          $(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+          $(this).find('.left').text(teamOnePercentage + "%")
+          $(this).find('.right').text(teamTwoPercentage + "%")
+        });
+
       });
 
-    var left = '#info div.bar div.left';
-    var right = '#info div.bar div.right';
-    var fullWidth = $(right).width();
-
-    $(left).animate({width:(31 * fullWidth * 0.01).toString()});
-    $(right).text('69%');
-    $(left).text('31%');
+    //$(left).animate({width:(31 * fullWidth * 0.01).toString()});
   </script>
   <script src="js/highcharts.js"></script>
 </body>

@@ -4,10 +4,10 @@ import json
 
 class TweetCollector():
     def __init__(self):
-    	self.consumer_key = ''
-	self.consumer_secret = ''
-	self.access_token_key = ''
-	self.access_token_secret = ''
+        self.consumer_key = '77uv5wYRi4lOyBOfkdrmw'
+        self.consumer_secret = '59SHeBIhXfRZWlwgaD6vmdIzzZ6hTxGkF8sdtsIBiQ'
+        self.access_token_key = '1593582174-T44Tzc25PSMY5XdPi9Av0M2lZosRUxX325r3g32'
+        self.access_token_secret = 'mQso4hh5yCmwn2Zfo7iBzbUMBP9uvi8imDDgmY0'
 
     def CollectTweets(self, query):
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)

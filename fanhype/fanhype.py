@@ -3,15 +3,17 @@ import cgi
 import jinja2
 import os
 import random
-from google.appengine.ext import ndb
+import json
+from google.appengine.ext import ndb, db
 import jinja2
 import os
 from query_tweet_collector import TweetCollector
-from models import ApplicationData, Tweet
+import models
 import tweepy
 from tweepy import OAuthHandler
 import config
-from analyzer import GameHype
+import analyzer
+import game_control
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -19,24 +21,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
+
 class MainPage(webapp2.RequestHandler):
-        def get(self):
-            template = JINJA_ENVIRONMENT.get_template('index.html')
-            self.response.write(template.render())
-            """
-            tweet_query = Tweet.query()
-            tweets = tweet_query.fetch()
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('index.html')
 
-            #Example separation of tweets into two teams' tweets.
-            team_one_tweets = [tweet for tweet in tweets if tweet.coordinates.lat > 40]
-            team_two_tweets = [tweet for tweet in tweets if tweet.coordinates.lat < 40]
+        games = models.HypeTable.query().fetch()
+        template_values = {'games': games}
+        self.response.write(template.render(template_values))
 
-            template_values = {
-                'team_one_tweets': team_one_tweets,
-                'team_two_tweets': team_two_tweets
-            }
-            self.response.write(template.render(template_values))
-                """
+
 
 class SingleGame(webapp2.RequestHandler):
     def post(self):
@@ -44,7 +38,7 @@ class SingleGame(webapp2.RequestHandler):
         query = "Kentucky"
         listOfTweets = []
         #collector.CollectTweets(query)
-        tweets = ApplicationData.queryTweets().fetch(5)
+        tweets = models.ApplicationData.queryTweets().fetch(5)
         for tweet in tweets:
                 listOfTweets.append(tweet.tweetText)
         template_values = {'listOfTweets': listOfTweets,}
@@ -52,83 +46,118 @@ class SingleGame(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('gamehype.html')
         self.response.write(template.render(template_values))
 
+
 class TweetScript(webapp2.RequestHandler):
-        def get(self):                        
-                c = config.Config()
-                keys = c.get_keys()
-                auth = OAuthHandler(keys[0], keys[1])
-                auth.set_access_token(keys[2], keys[3])        
-                api = tweepy.API(auth)
-                query = "Johnny Football"
-                tw = {}
-                #appData = ApplicationData()
-                        
-                tweetList = []
-                tweetText = ""
-                hashTags = []
-                tagInfo = []
-                tagTuples = []
-                printList = []
-                for tweet in tweepy.Cursor(api.search,
-                    q=query,
-                    rpp=100,
-                    result_type="recent",
-                    include_entities=True,
-                    lang="en").items(5):
-                    tweetText = tweet.text      #.encode('utf-8')
-                    appData = ApplicationData()
-                    appData.tweetText = tweetText
-                    appData.put()   
+    def get(self):                        
+        c = config.Config()
+        keys = c.get_keys()
+        auth = OAuthHandler(keys[0], keys[1])
+        auth.set_access_token(keys[2], keys[3])        
+        api = tweepy.API(auth)
+        query = "Johnny Football"
+        tw = {}
+        #appData = ApplicationData()
+                
+        tweetList = []
+        tweetText = ""
+        hashTags = []
+        tagInfo = []
+        tagTuples = []
+        printList = []
+        for tweet in tweepy.Cursor(api.search,
+            q=query,
+            rpp=100,
+            result_type="recent",
+            include_entities=True,
+            lang="en").items(5):
+            tweetText = tweet.text      #.encode('utf-8')
+            appData = models.ApplicationData()
+            appData.tweetText = tweetText
+            appData.put()   
 
 class Game(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('game.html')
 
-        tweets_query = ndb.gql('SELECT * FROM Tweet WHERE latitude != null')
-        tweets = tweets_query.fetch()
+        team_one_name = self.request.get('one')
+        team_two_name = self.request.get('two')
 
-        #Example separation of tweets into two teams' tweets.
-        team_one_tweets = [tweet for tweet in tweets if  tweet.latitude > 40]
-        team_two_tweets = [tweet for tweet in tweets if  tweet.latitude < 40]
+        hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()[0]
 
-        team_one_tags = ['everyoneinblack', 'sicou', 'baylor', 'sicem', 'sicembears']
-        team_two_tags = ['oklahoma','boomersooner', 'gosooners', 'beatbaylor']
-        game_tweets_query = ndb.gql('SELECT * FROM Tweet')
-        tweets = game_tweets_query.fetch()
-        gHype = GameHype(tweets, team_one_tags, team_two_tags)
-        
-        hypeTuple = gHype.getHype()
-        baylorTotal = hypeTuple[0]
-        baylorHype = hypeTuple[1]    
-    
-        oklahomaTotal = hypeTuple[2]
-        oklahomaHype = hypeTuple[3]
+        team_one_coordinates = models.GeoData.query(models.GeoData.teamName == hypeTable.teamOneName).fetch()[0].coordinates.split('|')
+        team_two_coordinates = models.GeoData.query(models.GeoData.teamName == hypeTable.teamTwoName).fetch()[0].coordinates.split('|')
+
+        team_one_points = [models.Point(point) for point in team_one_coordinates]
+        team_two_points = [models.Point(point) for point in team_two_coordinates]
+
         template_values = {
-            'baylor_total': baylorTotal,
-            'baylor_hype': baylorHype,
-            'oklahoma_total': oklahomaTotal,
-            'oklahoma_hype': oklahomaHype,
-            'team_one_tweets': team_one_tweets,
-            'team_two_tweets': team_two_tweets
+            'game_title': hypeTable.gameTitle,
+            'game_time': hypeTable.gameTime,
+            'game_location': hypeTable.gameLocation,
+            'team_one_color': hypeTable.teamOneColor,
+            'team_two_color': hypeTable.teamTwoColor,
+            'team_one_name': hypeTable.teamOneName,
+            'team_two_name': hypeTable.teamTwoName,
+            'team_one_total': hypeTable.teamOneTweetTotal,
+            'team_two_total': hypeTable.teamTwoTweetTotal,
+            'team_one_hype': hypeTable.teamOneHype,
+            'team_two_hype': hypeTable.teamTwoHype,
+            'team_one_image': hypeTable.teamOneImage,
+            'team_two_image': hypeTable.teamTwoImage,
+            'team_one_hashtags': hypeTable.teamOneHashTags.split(','),
+            'team_two_hashtags': hypeTable.teamTwoHashTags.split(','),
+            'team_one_tweets': team_one_points,
+            'team_two_tweets': team_two_points
         }
         self.response.write(template.render(template_values))
 
+
 class SaveTweet(webapp2.RequestHandler):
     def get(self):
-        lat = -83.74886513
-        lon = 42.26584491
-        lat += random.randint(0,4) - 2
-        lon += random.randint(0,4) - 2                                                                                       
-        new_tweet = Tweet()
-        new_tweet.screen_name = 'Tweet'
-        new_tweet.coordinates = ndb.GeoPt(lat, lon)
-        new_tweet.hashTags = "beatbaylor"
-        new_tweet.put()
-        self.response.write('Added data point at: ('+str(lat)+', '+str(lon)+')')
+        models.initializeModels()
+        print "Initialized models"
 
-                #appData = ApplicationData()
-                #appData.tweetText = tweetText
-                #appData.put()   
+    def post(self):        
+        tweets = json.loads(self.request.body)
+        hypeTables = models.HypeTable.query().fetch()
+        geoData = models.GeoData.query().fetch()
+
+        #This code used for resetting all values
+        """for row in geoData:
+            row.coordinates = ""
+
+        for row in hypeTables:
+            row.teamOneHype = 0
+            row.teamTwoHype = 0
+            row.teamOneTweetTotal = 0
+            row.teamTwoTweetTotal = 0"""
+
+        for hypeTable in hypeTables:
+            team_one_tags = hypeTable.teamOneHashTags.split(',')
+            team_two_tags = hypeTable.teamTwoHashTags.split(',')
+            for tweet in tweets:
+                for hashtag in tweet['entities']['hashtags']:
+                    hypeScore = analyzer.calculateHypeJson([tweet], team_one_tags, team_two_tags)
+                    if hashtag['text'].lower() in team_one_tags:
+                        hypeTable.teamOneHype += hypeScore[1]
+                        hypeTable.teamOneTweetTotal += 1
+                        addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
+                    if hashtag['text'].lower() in team_two_tags:
+                        hypeTable.teamTwoHype += hypeScore[3]
+                        hypeTable.teamTwoTweetTotal += 1
+                        addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
+
+        [row.put() for row in geoData];
+        [row.put() for row in hypeTables];
+
+def addTweetCoordinates(tweet, geoData, teamName):
+    if 'coordinates' in tweet and tweet['coordinates']:
+        coordinates = tweet['coordinates']['coordinates']
+        for data in geoData:
+            if data.teamName == teamName:
+                data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
+
+
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -136,4 +165,6 @@ application = webapp2.WSGIApplication([
     ('/cron', TweetScript),
     ('/game', Game),
     ('/savetweet', SaveTweet),
+    ('/newgame', game_control.NewGame),
+    ('/deletegame', game_control.DeleteGame)
 ], debug=True)

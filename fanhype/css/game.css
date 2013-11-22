@@ -285,3 +285,7 @@ div#stream {
     div#stream div.stream_tweet h2 {
       margin: 12px 15px;
       text-align: right; }
+
+.submit_button {
+  padding:5px;
+}
