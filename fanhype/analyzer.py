@@ -1,5 +1,6 @@
 from models import Tweet
 import logging
+import math
 
 def calculateHype(tweets, teamOneTags, teamTwoTags):
 
@@ -48,16 +49,37 @@ def calculateHypeJson(tweets, teamOneTags, teamTwoTags):
     for tweet in tweets:
         tempCountOne = 0
         tempCountTwo = 0
+        teamOneTagScore = 0
+        teamTwoTagScore = 0
         for hashTag in tweet['entities']['hashtags']:
             if hashTag['text'] in teamOneTags and hashTag['text'] not in teamTwoTags:
                 tempCountOne = 1
+                teamOneTagScore += 1
             if hashTag['text'] in teamTwoTags and hashTag['text'] not in teamOneTags:
                 tempCountTwo = 1
+                teamTwoTagScore += 1
 
-        if tempCountOne == 1 and tempCountTwo == 0:
-            teamOneTotal += 1
-        if tempCountOne == 0 and tempCountTwo == 1:
-            teamTwoTotal += 1
+        tempCountOne = (1 + teamOneTagScore * float(tweet['user']['followers_count'])/1000) * tempCountOne
+        tempCountTwo = (1 + teamTwoTagScore * float(tweet['user']['followers_count'])/1000) * tempCountTwo
+        
+    return (tempCountOne,tempCountTwo)
+        #logging.info(tempCountTwo)
+        
+
+        #if tempCountOne == 1:
+            #print "AHHHHHHHH"
+        #tempCountOne = 5# * tempCountOne
+        #tempCountTwo = 100 * tempCountTwo
+
+
+        #tempCountOne = int(tweet['user']['followers_count'])
+        #tempCountTwo = int(tweet['user']['followers_count'])
+        
+
+    """    if tempCountOne >= 1 and tempCountTwo == 0:
+            teamOneTotal += tempCountOne
+        if tempCountOne == 0 and tempCountTwo >= 1:
+            teamTwoTotal += tempCountTwo
                 
     total = teamOneTotal + teamTwoTotal
 
@@ -68,4 +90,4 @@ def calculateHypeJson(tweets, teamOneTags, teamTwoTags):
         teamOneHype = 0
         teamTwoHype = 0
     
-    return (teamOneTotal, teamOneHype, teamTwoTotal, teamTwoHype)
+    return (teamOneTotal, teamOneHype, teamTwoTotal, teamTwoHype)"""

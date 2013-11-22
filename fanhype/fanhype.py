@@ -123,14 +123,14 @@ class SaveTweet(webapp2.RequestHandler):
         geoData = models.GeoData.query().fetch()
 
         #This code used for resetting all values
-        """for row in geoData:
+        for row in geoData:
             row.coordinates = ""
 
         for row in hypeTables:
             row.teamOneHype = 0
             row.teamTwoHype = 0
             row.teamOneTweetTotal = 0
-            row.teamTwoTweetTotal = 0"""
+            row.teamTwoTweetTotal = 0
 
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
@@ -139,11 +139,11 @@ class SaveTweet(webapp2.RequestHandler):
                 for hashtag in tweet['entities']['hashtags']:
                     hypeScore = analyzer.calculateHypeJson([tweet], team_one_tags, team_two_tags)
                     if hashtag['text'].lower() in team_one_tags:
-                        hypeTable.teamOneHype += hypeScore[1]
+                        hypeTable.teamOneHype += hypeScore[0]
                         hypeTable.teamOneTweetTotal += 1
                         addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
                     if hashtag['text'].lower() in team_two_tags:
-                        hypeTable.teamTwoHype += hypeScore[3]
+                        hypeTable.teamTwoHype += hypeScore[1]
                         hypeTable.teamTwoTweetTotal += 1
                         addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
 
