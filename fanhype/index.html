@@ -49,7 +49,6 @@
 
 	<script>
 		$(function(){
-
 			$('.bar').each(function(){
 				var teamOne = parseFloat($(this).find('.left').text());
 				var teamTwo = parseFloat($(this).find('.right').text());
@@ -60,12 +59,6 @@
 				$(this).find('.left').width(fullWidth* (teamOnePercentage/100));
 				$(this).find('.left').text(teamOnePercentage + "%")
 				$(this).find('.right').text(teamTwoPercentage + "%")
-			});
-
-			$('#change').click(function() {
-				$(oregon).animate({width:($('#score').val() * fullWidth * 0.01).toString()});
-				$(oregon).text($('#score').val() + '%');
-				$(stanford).text(100 - $('#score').val() + '%');
 			});
 		});
 	</script>

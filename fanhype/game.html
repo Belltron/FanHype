@@ -96,8 +96,8 @@
         <span></span>
         <span></span>
         <div class="bar">
-          <div class="right">50%</div>
-          <div class="left">50%</div>
+          <div class="right" style="background:{{ team_two_color }};">{{ team_two_hype }}</div>
+          <div class="left" style="background:{{ team_one_color }};">{{ team_one_hype }}</div>
         </div>
       </div>
       <div id="left_team">
@@ -352,15 +352,23 @@
           }]
               }]
           });
+
+
+        $('.bar').each(function(){
+          var teamOne = parseFloat($(this).find('.left').text());
+          var teamTwo = parseFloat($(this).find('.right').text());
+          var fullWidth = $(this).width();
+          var percentage = (teamOne / (teamOne + teamTwo)) * 100;
+          var teamOnePercentage = Math.floor(percentage);
+          var teamTwoPercentage = 100-teamOnePercentage;
+          $(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+          $(this).find('.left').text(teamOnePercentage + "%")
+          $(this).find('.right').text(teamTwoPercentage + "%")
+        });
+
       });
 
-    var left = '#info div.bar div.left';
-    var right = '#info div.bar div.right';
-    var fullWidth = $(right).width();
-
-    $(left).animate({width:(31 * fullWidth * 0.01).toString()});
-    $(right).text('69%');
-    $(left).text('31%');
+    //$(left).animate({width:(31 * fullWidth * 0.01).toString()});
   </script>
   <script src="js/highcharts.js"></script>
 </body>
