@@ -147,7 +147,7 @@ class SaveTweet(webapp2.RequestHandler):
                         hypeTable.teamOneTweetTotal += 1                       
                         tweet['hypescore'] = hypeScore[0]
                         tweet['teamname'] = hypeTable.teamOneName
-                         addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
+                        addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
                     elif hashtag['text'].lower() in team_two_tags:
                         hypeTable.teamTwoHype += hypeScore[1]
                         tweet['hypescore'] = hypeScore[1]
