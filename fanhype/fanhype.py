@@ -77,6 +77,7 @@ class TweetScript(webapp2.RequestHandler):
 
 class Game(webapp2.RequestHandler):
     def get(self):
+
         template = JINJA_ENVIRONMENT.get_template('game.html')
 
         team_one_name = self.request.get('one')
@@ -89,6 +90,11 @@ class Game(webapp2.RequestHandler):
 
         team_one_points = [models.Point(point) for point in team_one_coordinates]
         team_two_points = [models.Point(point) for point in team_two_coordinates]
+
+        # team_one_top = models.TopTweet.query(team_one_name == models.TopTweet.teamName).fetch()[0]
+        # team_two_top = models.TopTweet.query(team_two_name == models.TopTweet.teamName).fetch()[0]
+        team_one_top = {}
+        team_two_top = {}
 
         template_values = {
             'game_title': hypeTable.gameTitle,
@@ -107,7 +113,9 @@ class Game(webapp2.RequestHandler):
             'team_one_hashtags': hypeTable.teamOneHashTags.split(','),
             'team_two_hashtags': hypeTable.teamTwoHashTags.split(','),
             'team_one_tweets': team_one_points,
-            'team_two_tweets': team_two_points
+            'team_two_tweets': team_two_points,
+            'team_one_top': team_one_top,
+            'team_two_top': team_two_top
         }
         self.response.write(template.render(template_values))
 
@@ -123,6 +131,7 @@ class SaveTweet(webapp2.RequestHandler):
             return;
         hypeTables = models.HypeTable.query().fetch()
         geoData = models.GeoData.query().fetch()
+        # get 5 most recent tweets
 
         #This code used for resetting all values
         for row in geoData:
@@ -160,10 +169,8 @@ class SaveTweet(webapp2.RequestHandler):
         #Find the top tweet of the new tweets
         for hypeTable in hypeTables:
             team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
-            print str(len(team_one_game_tweets))
             calculateTopTweet(team_one_game_tweets)
             team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
-            print str(len(team_two_game_tweets))
             calculateTopTweet(team_two_game_tweets)
 
         [row.put() for row in geoData];
