@@ -21,21 +21,6 @@
 	<hr>
 
 	<div id="content">
-			<!-- article id="game1">
-				<div class="game_info">
-						<h1>Oregon @ Stanford</h1>
-						<p>Thursday, November 7, 8:00 PM (CT)<br>
-						Stanford Stadium, Stanford, California</p>
-
-					<img src="http://placehold.it/180x180/ffffff/004F27" alt="oregon" class="left_logo">
-					<img src="http://placehold.it/180x180/ffffff/8C1515" alt="stanford" class="right_logo">
-				</div>
-				<div class="bar">
-					<div class="right">50%</div>
-					<div class="left">50%</div>
-				</div>
-			</article -->
-
 		{% for game in games %}
 			<a href="/game?one={{game.teamOneName}}&two={{game.teamTwoName}}">
 				<article id="game2">
@@ -48,33 +33,41 @@
 						<img src="{{game.teamTwoImage}}" alt="{{game.teamTwoName}}" class="right_logo">
 					</div>
 					<div class="bar">
-						<div class="right">{{game.teamOneHype}}</div>
-						<div class="left">{{game.teamTwoHype}}</div>
+						<div class="right" style="background:{{game.teamTwoColor}};">{{game.teamOneHype}}</div>
+						<div class="left" style="background:{{game.teamOneColor}};">{{game.teamTwoHype}}</div>
 					</div>
 				</article>
 			</a>
 		{% endfor %}
 		
-		
 		<div id="debug">
 			<input id="score"/>
 			<a href="#" id="change">Oregon's Hype %</a>
 		</div>
+
 	</div>
 
 	<script>
-		var oregon = '#game1 div.bar div.left';
-		var stanford = '#game1 div.bar div.right';
-		var fullWidth = $('#game1 div.bar').width();
+		$(function(){
 
-		$('#change').click(function() {
-			$(oregon).animate({width:($('#score').val() * fullWidth * 0.01).toString()});
-			$(oregon).text($('#score').val() + '%');
-			$(stanford).text(100 - $('#score').val() + '%');
+			$('.bar').each(function(){
+				var teamOne = parseFloat($(this).find('.left').text());
+				var teamTwo = parseFloat($(this).find('.right').text());
+				var fullWidth = $(this).width();
+				var percentage = (teamOne / (teamOne + teamTwo)) * 100;
+				var teamOnePercentage = Math.floor(percentage);
+				var teamTwoPercentage = 100-teamOnePercentage;
+				$(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+				$(this).find('.left').text(teamOnePercentage + "%")
+				$(this).find('.right').text(teamTwoPercentage + "%")
+			});
+
+			$('#change').click(function() {
+				$(oregon).animate({width:($('#score').val() * fullWidth * 0.01).toString()});
+				$(oregon).text($('#score').val() + '%');
+				$(stanford).text(100 - $('#score').val() + '%');
+			});
 		});
-
-		$('#game2 div.bar div.left').css({'background':'#4F1315'});
-		$('#game2 div.bar div.right').css({'background':'#003015'});
 	</script>
 </body>
 </html>
