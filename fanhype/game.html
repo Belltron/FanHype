@@ -80,7 +80,7 @@
 
     <ul>
       <li><a href="../">HOME</a></li>
-      <li><a href="./">GAMES</a></li>
+      <li><a href="../newgame">GAMES</a></li>
       <li><a href="#">ABOUT</a></li>
     </ul>
   </nav>
@@ -155,9 +155,9 @@
     <div id="top_tweets">
       <h1>Top Tweets</h1>
       <div id="top_tweet_left">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+        <img src="{{ team_one_top.imageUrl }}" alt="{{ team_one_top.userName }}">
         <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+          <p class="screen_name"><a href="https://twitter.com/{{ team_one_top.userName }}">@{{ team_one_top.userName }}</a></p>
           <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
             [-97.14821387,31.53009687]</p>
           <p>Followers: 302</p>
@@ -165,31 +165,25 @@
 
         </div>
         <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
-          baylor sucks and OU is so great wow
-          <a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+          {{ team_one_top.tweetText }}
         </p>
         <hr>
-        <h2 style="color:#b20837;">Oklahoma hype score: 30</h2>
+        <h2 style="color:#b20837;">{{ team_one_top.teamName }} hype score: {{ team_one_top.hypeScore }}</h2>
       </div>
       <div id="top_tweet_right">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+        <img src="{{ team_two_top.imageUrl }}" alt="{{ team_two_top.userName }}">
         <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
+          <p class="screen_name"><a href="https://twitter.com/{{ team_two_top.userName }}">@{{ team_two_top.userName }}</a></p>
           <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
             [-97.14821387,31.53009687]</p>
           <p>Followers: 20910</p>
           <p>Friends: 5431</p>
 
         </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23sicem">
-          #sicem</a> bears! woo! yeah go bears
-          <a href="https://twitter.com/search?q=%23sicou">#sicou</a>
-          <a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+        <p class="tweet_text">{{ team_two_top.tweetText }}
         </p>
         <hr>
-        <h2 style="color:#004933;">Baylor hype score: 92</h2>
+        <h2 style="color:#004933;">{{ team_two_top.teamName }} hype score: {{ team_two_top.hypeScore }}</h2>
       </div>
     </div>
     <hr>

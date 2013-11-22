@@ -77,6 +77,7 @@ class TweetScript(webapp2.RequestHandler):
 
 class Game(webapp2.RequestHandler):
     def get(self):
+
         template = JINJA_ENVIRONMENT.get_template('game.html')
 
         team_one_name = self.request.get('one')
@@ -89,6 +90,26 @@ class Game(webapp2.RequestHandler):
 
         team_one_points = [models.Point(point) for point in team_one_coordinates]
         team_two_points = [models.Point(point) for point in team_two_coordinates]
+
+        lt = models.TopTweet()
+        lt.tweetText = 'Tweet for #baylor #sicem'
+        lt.userName = 'baylorfan'
+        lt.teamName = 'Baylor'
+        lt.hypeScore = '80'
+        lt.imageUrl = 'https://pbs.twimg.com/profile_images/1132696610/securedownload.jpeg'
+        lt.put()
+
+
+        lt = models.TopTweet()
+        lt.tweetText = 'Tweet for #Oklahoma #boomersooner'
+        lt.userName = 'ou_fan'
+        lt.teamName = 'Oklahoma'
+        lt.hypeScore = '80'
+        lt.imageUrl = 'https://pbs.twimg.com/profile_images/754692968/droppedImage.jpg'
+        lt.put()
+
+        team_one_top = models.TopTweet.query(team_one_name == models.TopTweet.teamName).fetch()[0]
+        team_two_top = models.TopTweet.query(team_two_name == models.TopTweet.teamName).fetch()[0]
 
         template_values = {
             'game_title': hypeTable.gameTitle,
@@ -107,7 +128,9 @@ class Game(webapp2.RequestHandler):
             'team_one_hashtags': hypeTable.teamOneHashTags.split(','),
             'team_two_hashtags': hypeTable.teamTwoHashTags.split(','),
             'team_one_tweets': team_one_points,
-            'team_two_tweets': team_two_points
+            'team_two_tweets': team_two_points,
+            'team_one_top': team_one_top,
+            'team_two_top': team_two_top
         }
         self.response.write(template.render(template_values))
 
@@ -121,16 +144,7 @@ class SaveTweet(webapp2.RequestHandler):
         tweets = json.loads(self.request.body)
         hypeTables = models.HypeTable.query().fetch()
         geoData = models.GeoData.query().fetch()
-
-        #This code used for resetting all values
-        """for row in geoData:
-            row.coordinates = ""
-
-        for row in hypeTables:
-            row.teamOneHype = 0
-            row.teamTwoHype = 0
-            row.teamOneTweetTotal = 0
-            row.teamTwoTweetTotal = 0"""
+        # get 5 most recent tweets
 
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
@@ -147,8 +161,8 @@ class SaveTweet(webapp2.RequestHandler):
                         hypeTable.teamTwoTweetTotal += 1
                         addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
 
-        [row.put() for row in geoData];
-        [row.put() for row in hypeTables];
+        [row.put() for row in geoData]
+        [row.put() for row in hypeTables]
 
 def addTweetCoordinates(tweet, geoData, teamName):
     if 'coordinates' in tweet and tweet['coordinates']:
