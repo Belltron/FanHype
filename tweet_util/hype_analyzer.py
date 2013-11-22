@@ -72,7 +72,7 @@ class GameHype(object):
 if __name__=="__main__":
     gameTimeString = "Thu Nov 07 23:30:00 +0000 2013"
     gameTime = time.strptime(gameTimeString, "%a %b %d %H:%M:%S +0000 %Y")
-    tweets = read_data(os.path.join(os.getcwd(),'bo_tweets.json'))
+    tweets = read_data(os.path.join(os.getcwd(),'baylorOklahoma.json'))
     team_one_name = 'Baylor'
     team_two_name = 'Oklahoma'
     team_one_tags = ['everyoneinblack', 'sicou', 'baylor', 'sicem', 'sicembears']
