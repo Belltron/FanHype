@@ -361,14 +361,13 @@
           var percentage = (teamOne / (teamOne + teamTwo)) * 100;
           var teamOnePercentage = Math.floor(percentage);
           var teamTwoPercentage = 100-teamOnePercentage;
-          $(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+          $(this).find('.left').delay(750).animate({width:fullWidth * (teamOnePercentage/100)}, 1000);
           $(this).find('.left').text(teamOnePercentage + "%")
           $(this).find('.right').text(teamTwoPercentage + "%")
         });
 
       });
 
-    //$(left).animate({width:(31 * fullWidth * 0.01).toString()});
   </script>
   <script src="js/highcharts.js"></script>
 </body>

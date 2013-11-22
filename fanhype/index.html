@@ -49,6 +49,7 @@
 
 	<script>
 		$(function(){
+			delay = 200
 			$('.bar').each(function(){
 				var teamOne = parseFloat($(this).find('.left').text());
 				var teamTwo = parseFloat($(this).find('.right').text());
@@ -56,7 +57,7 @@
 				var percentage = (teamOne / (teamOne + teamTwo)) * 100;
 				var teamOnePercentage = Math.floor(percentage);
 				var teamTwoPercentage = 100-teamOnePercentage;
-				$(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+				$(this).find('.left').delay(delay += 500).animate({width:fullWidth * (teamOnePercentage/100)}, 1000);
 				$(this).find('.left').text(teamOnePercentage + "%")
 				$(this).find('.right').text(teamTwoPercentage + "%")
 			});
