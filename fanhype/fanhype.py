@@ -54,7 +54,8 @@ class Game(webapp2.RequestHandler):
         team_one_top = team_one_top_list[0] if len(team_one_top_list) > 0 else {}
         team_two_top = team_two_top_list[0] if len(team_two_top_list) > 0 else {}
 
-        latest_tweets = []
+        latest_tweets = models.LatestTweets.query(ndb.OR(models.LatestTweets.teamName == team_one_name, models.LatestTweets.teamName == team_two_name)).fetch()
+        random.shuffle(latest_tweets)
 
         template_values = {
             'game_title': hypeTable.gameTitle,
@@ -113,21 +114,25 @@ def saveNewTweets(tweets):
     for hypeTable in hypeTables:
         team_one_tags = hypeTable.teamOneHashTags.split(',')
         team_two_tags = hypeTable.teamTwoHashTags.split(',')
+        team_one_tags = [tag.lower() for tag in team_one_tags]
+        team_two_tags = [tag.lower() for tag in team_two_tags]
         for tweet in tweets:
-            for hashtag in tweet['entities']['hashtags']:
-                hypeScore = analyzer.calculateHypeJson([tweet], team_one_tags, team_two_tags)
-                if hashtag['text'].lower() in team_one_tags:
-                    hypeTable.teamOneHype += hypeScore[0]
-                    hypeTable.teamOneTweetTotal += 1                       
-                    tweet['hypescore'] = hypeScore[0]
-                    tweet['teamname'] = hypeTable.teamOneName
-                    addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
-                elif hashtag['text'].lower() in team_two_tags:
-                    hypeTable.teamTwoHype += hypeScore[1]
-                    tweet['hypescore'] = hypeScore[1]
-                    tweet['teamname'] = hypeTable.teamTwoName
-                    hypeTable.teamTwoTweetTotal += 1
-                    addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
+            hypeScore = analyzer.calculateHypeJson(tweet, team_one_tags, team_two_tags)
+
+            if hypeScore[0] == hypeScore[1]:
+                print '****', hypeScore[0]
+            elif hypeScore[0] > hypeScore[1]:
+                tweet['hypescore'] = hypeScore[0]
+                tweet['teamname'] = hypeTable.teamOneName
+                hypeTable.teamOneHype += hypeScore[0]
+                hypeTable.teamOneTweetTotal += 1
+                addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
+            else:
+                tweet['hypescore'] = hypeScore[1]
+                tweet['teamname'] = hypeTable.teamTwoName
+                hypeTable.teamTwoHype += hypeScore[1]
+                hypeTable.teamTwoTweetTotal += 1
+                addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
 
     #Find the top tweet of the new tweets
     for hypeTable in hypeTables:
@@ -135,6 +140,7 @@ def saveNewTweets(tweets):
         calculateTopTweet(team_one_game_tweets)
         team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
         calculateTopTweet(team_two_game_tweets)
+
 
     [row.put() for row in geoData]
     [row.put() for row in hypeTables]
@@ -147,12 +153,13 @@ def addTweetCoordinates(tweet, geoData, teamName):
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
                 
 def getLatestTweets(tweets):
+
     team = ""
     if len(tweets) >= 5:
         lastFiveTweets = tweets[-5:]
     else:
         tweetsLength = len(tweets)
-        lastFiveTweets = tweets[-tweetsLength:]  
+        lastFiveTweets = tweets[-tweetsLength:] 
     team = (lastFiveTweets[-1])['teamname']
             
     dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == team).fetch()
