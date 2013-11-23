@@ -14,6 +14,8 @@ from tweepy import OAuthHandler
 import config
 import analyzer
 import game_control
+import time
+import logging
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -119,20 +121,21 @@ class SaveTweet(webapp2.RequestHandler):
 
     def post(self):        
         tweets = json.loads(self.request.body)
+        
         if len(tweets) == 0:
             return;
         hypeTables = models.HypeTable.query().fetch()
-        geoData = models.GeoData.query().fetch()
+        geoData = models.GeoData.query().fetch()                
 
         #This code used for resetting all values
-        for row in geoData:
+        """for row in geoData:
             row.coordinates = ""
 
         for row in hypeTables:
             row.teamOneHype = 0
             row.teamTwoHype = 0
             row.teamOneTweetTotal = 0
-            row.teamTwoTweetTotal = 0
+            row.teamTwoTweetTotal = 0"""
 
         for hypeTable in hypeTables:
             team_one_tags = hypeTable.teamOneHashTags.split(',')
@@ -159,8 +162,10 @@ class SaveTweet(webapp2.RequestHandler):
         for hypeTable in hypeTables:
             team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
             calculateTopTweet(team_one_game_tweets)
+            getLatestTweets(team_one_game_tweets)
             team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
             calculateTopTweet(team_two_game_tweets)
+            getLatestTweets(team_two_game_tweets)
 
         [row.put() for row in geoData];
         [row.put() for row in hypeTables];
@@ -171,6 +176,49 @@ def addTweetCoordinates(tweet, geoData, teamName):
         for data in geoData:
             if data.teamName == teamName:
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
+                
+def getLatestTweets(tweets):
+    team = ""
+    if len(tweets) >= 5:
+        lastFiveTweets = tweets[-5:]
+    else:
+        tweetsLength = len(tweets)
+        lastFiveTweets = tweets[-tweetsLength:]  
+    team = (lastFiveTweets[-1])['teamname']
+            
+    dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == team).fetch()
+    tempTweets = dataStoreLatestTweets
+    [row.key.delete() for row in tempTweets]   
+    
+    latestTweets = []
+    for lTweet in lastFiveTweets:
+        latestTweet = models.LatestTweets()
+        if 'teamname' in lTweet:
+            latestTweet.teamName = lTweet['teamname']
+        latestTweet.imageUrl = lTweet['user']['profile_img_url']
+        latestTweet.tweetText = lTweet['text']
+        latestTweet.userName = lTweet['user']['screen_name']
+        if 'hypescore' in lTweet:
+            latestTweet.hypeScore = str(lTweet['hypescore'])
+        latestTweet.createdAt = lTweet['created_at']
+        logging.info(lTweet['created_at'])
+        latestTweet.followerCount = str(lTweet['user']['followers_count'])
+        add = True
+        if len(dataStoreLatestTweets) > 0:
+            for dslt in dataStoreLatestTweets:
+                if latestTweet.userName == dslt.userName:
+                    add = False
+            if add:
+                latestTweets.append(latestTweet)
+        else: latestTweets.append(latestTweet)
+    if len(dataStoreLatestTweets) == 0:
+        for dst in latestTweets:
+            dst.put()
+    else:
+        dataStoreLatestTweets += latestTweets
+        putLatest = sorted(dataStoreLatestTweets, key = lambda t : time.strptime(t.createdAt, "%a %b %d %H:%M:%S +0000 %Y"))
+        for dst in putLatest[-5:]:
+            dst.put()    
 
 def calculateTopTweet(tweets):
     if tweets:

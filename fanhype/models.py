@@ -57,7 +57,7 @@ class TopTweet(ndb.Model):
     followerCount = ndb.StringProperty()
 
 class LatestTweets(ndb.Model):
-    teamName = ndb.StringProperty()
+    teamName  = ndb.StringProperty()
     imageUrl = ndb.StringProperty()
     tweetText = ndb.StringProperty()
     userName = ndb.StringProperty()
