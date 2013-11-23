@@ -14,6 +14,8 @@ from tweepy import OAuthHandler
 import config
 import analyzer
 import game_control
+import time
+import logging
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -143,6 +145,49 @@ def addTweetCoordinates(tweet, geoData, teamName):
         for data in geoData:
             if data.teamName == teamName:
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
+                
+def getLatestTweets(tweets):
+    team = ""
+    if len(tweets) >= 5:
+        lastFiveTweets = tweets[-5:]
+    else:
+        tweetsLength = len(tweets)
+        lastFiveTweets = tweets[-tweetsLength:]  
+    team = (lastFiveTweets[-1])['teamname']
+            
+    dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == team).fetch()
+    tempTweets = dataStoreLatestTweets
+    [row.key.delete() for row in tempTweets]   
+    
+    latestTweets = []
+    for lTweet in lastFiveTweets:
+        latestTweet = models.LatestTweets()
+        if 'teamname' in lTweet:
+            latestTweet.teamName = lTweet['teamname']
+        latestTweet.imageUrl = lTweet['user']['profile_img_url']
+        latestTweet.tweetText = lTweet['text']
+        latestTweet.userName = lTweet['user']['screen_name']
+        if 'hypescore' in lTweet:
+            latestTweet.hypeScore = str(lTweet['hypescore'])
+        latestTweet.createdAt = lTweet['created_at']
+        logging.info(lTweet['created_at'])
+        latestTweet.followerCount = str(lTweet['user']['followers_count'])
+        add = True
+        if len(dataStoreLatestTweets) > 0:
+            for dslt in dataStoreLatestTweets:
+                if latestTweet.userName == dslt.userName:
+                    add = False
+            if add:
+                latestTweets.append(latestTweet)
+        else: latestTweets.append(latestTweet)
+    if len(dataStoreLatestTweets) == 0:
+        for dst in latestTweets:
+            dst.put()
+    else:
+        dataStoreLatestTweets += latestTweets
+        putLatest = sorted(dataStoreLatestTweets, key = lambda t : time.strptime(t.createdAt, "%a %b %d %H:%M:%S +0000 %Y"))
+        for dst in putLatest[-5:]:
+            dst.put()    
 
 def calculateTopTweet(tweets):
     if tweets:
