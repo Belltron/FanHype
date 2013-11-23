@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0; }
 
-.content {
+.content, article {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box; }
@@ -38,6 +38,7 @@ a {
   a:hover {
     color: red; }
 
+
 nav {
   width: 100%;
   padding: 0 5%;
@@ -58,7 +59,8 @@ nav {
     float: right;
     padding-top: 22px; }
     nav ul li {
-      float: left; }
+      float: left; 
+      line-height: 100%;}
       nav ul li a {
         padding: 22px;
         font-size: 11px;
@@ -285,6 +287,10 @@ div#stream {
     div#stream div.stream_tweet h2 {
       margin: 12px 15px;
       text-align: right; }
+
+div#legend {
+  position: absolute;
+}
 
 .submit_button {
   padding:5px;

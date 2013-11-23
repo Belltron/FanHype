@@ -91,10 +91,10 @@ class Game(webapp2.RequestHandler):
         team_one_points = [models.Point(point) for point in team_one_coordinates]
         team_two_points = [models.Point(point) for point in team_two_coordinates]
 
-        # team_one_top = models.TopTweet.query(team_one_name == models.TopTweet.teamName).fetch()[0]
-        # team_two_top = models.TopTweet.query(team_two_name == models.TopTweet.teamName).fetch()[0]
-        team_one_top = {}
-        team_two_top = {}
+        team_one_top = models.TopTweet.query(team_one_name == models.TopTweet.teamName).fetch()[0]
+        team_two_top = models.TopTweet.query(team_two_name == models.TopTweet.teamName).fetch()[0]
+
+        latest_tweets = []
 
         template_values = {
             'game_title': hypeTable.gameTitle,
@@ -115,7 +115,8 @@ class Game(webapp2.RequestHandler):
             'team_one_tweets': team_one_points,
             'team_two_tweets': team_two_points,
             'team_one_top': team_one_top,
-            'team_two_top': team_two_top
+            'team_two_top': team_two_top,
+            'latest_tweets': latest_tweets
         }
         self.response.write(template.render(template_values))
 
