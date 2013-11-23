@@ -79,6 +79,10 @@ class ClearGameData(webapp2.RequestHandler):
 
 		topTweets = models.TopTweet.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
 		[row.key.delete() for row in topTweets]	
+
+
+		latestTweets = models.LatestTweets.query(ndb.OR(models.LatestTweets.teamName == team_one_name, models.LatestTweets.teamName == team_two_name)).fetch()
+		[row.key.delete() for row in latestTweets]	
 		
 		time.sleep(1)
 		self.redirect("/newgame")
