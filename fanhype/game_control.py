@@ -4,6 +4,8 @@ import jinja2
 import os
 import models
 import time
+import fanhype
+import json
 from google.appengine.ext import ndb
 
 
@@ -58,6 +60,29 @@ class NewGame(webapp2.RequestHandler):
 		time.sleep(1)
 		self.redirect("/newgame")
 
+class ClearGameData(webapp2.RequestHandler):
+	def post(self):
+		team_one_name = self.request.get('one')
+		team_two_name = self.request.get('two')
+		hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()
+		for row in hypeTable:
+			row.teamOneHype = 0
+			row.teamTwoHype = 0
+			row.teamOneTweetTotal = 0
+			row.teamTwoTweetTotal = 0
+			row.put()
+
+		coordinates = models.GeoData.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
+		for row in coordinates:
+			row.coordinates = ""
+			row.put()
+
+		topTweets = models.TopTweet.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
+		[row.key.delete() for row in topTweets]	
+		
+		time.sleep(1)
+		self.redirect("/newgame")
+
 class DeleteGame(webapp2.RequestHandler):
 	def post(self):
 		team_one_name = self.request.get('one')
@@ -67,11 +92,35 @@ class DeleteGame(webapp2.RequestHandler):
 
 		coordinates = models.GeoData.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
 		[row.key.delete() for row in coordinates]
+
+		topTweets = models.TopTweet.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
+		[row.key.delete() for row in topTweets]
 		
 		time.sleep(1)
 		self.redirect("/newgame")
 
+class Import(webapp2.RequestHandler):
+	def post(self):
+		tweets_json = cgi.escape(self.request.get('tweets'))
+		tweet_string = str(tweets_json).split("\n")
 
+		tweets = []
+		for line in tweet_string:
+			tweets.append (json.loads (line.strip()))
+
+		
+		fanhype.saveNewTweets (tweets)
+		time.sleep(1)
+		self.redirect("/newgame")
+		#hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()
+
+		#[row.key.delete() for row in hypeTable]
+
+		#coordinates = models.GeoData.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
+		#[row.key.delete() for row in coordinates]
+		
+		#time.sleep(1)
+		#self.redirect("/newgame")
 
 
 
