@@ -71,7 +71,8 @@ class Game(webapp2.RequestHandler):
             'team_one_tweets': team_one_points,
             'team_two_tweets': team_two_points,
             'team_one_top': team_one_top,
-            'team_two_top': team_two_top
+            'team_two_top': team_two_top,
+            'latest_tweets': latest_tweets
         }
         self.response.write(template.render(template_values))
 

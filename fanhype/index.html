@@ -1,5 +1,4 @@
 {% autoescape true %}
-
 <html>
 <head>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
@@ -11,13 +10,11 @@
 	<nav>
 		<h1 id="mark"><a href="/">fanhype</a></h1>
 		<ul>
-			<li><a href="/">HOME</a></li>
-			<li><a href="/newgame">NEW GAME</a></li>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/newgame">NEW GAME</a></li>
 		</ul>
 	</nav>
-
 	<hr>
-
 	<div id="content">
 		{% for game in games %}
 			<a href="/game?one={{game.teamOneName}}&two={{game.teamTwoName}}">
@@ -41,15 +38,14 @@
 
 	<script>
 		$(function(){
-			delay = 200
 			$('.bar').each(function(){
 				var teamOne = parseFloat($(this).find('.left').text());
 				var teamTwo = parseFloat($(this).find('.right').text());
 				var fullWidth = $(this).width();
 				var percentage = (teamOne / (teamOne + teamTwo)) * 100;
-				var teamOnePercentage = Math.floor(percentage);
+				var teamOnePercentage = Math.round(percentage);
 				var teamTwoPercentage = 100-teamOnePercentage;
-				$(this).find('.left').delay(delay += 500).animate({width:fullWidth * (teamOnePercentage/100)}, 1000);
+				$(this).find('.left').width(fullWidth* (teamOnePercentage/100));
 				$(this).find('.left').text(teamOnePercentage + "%")
 				$(this).find('.right').text(teamTwoPercentage + "%")
 			});
