@@ -26,6 +26,11 @@ a {
 ul, li {
   list-style: none; }
 
+h1, h2, h3 {
+  font-family: 'Droid Serif', serif;
+  font-style: italic;
+  font-weight: 700; }
+
 /* variables */
 /* styles */
 nav {
@@ -48,7 +53,8 @@ nav {
     float: right;
     padding-top: 22px; }
     nav ul li {
-      float: left; }
+      float: left; 
+      line-height: 100%;}
       nav ul li a {
         padding: 22px;
         font-size: 11px;
@@ -127,19 +133,7 @@ article {
       left: 0;
       width: 210px;
       text-align: left;
-      background: #004f27;
-      /* 			&:after {
-      				position: absolute;
-      			    top: 50%;
-      			    right: -4px;
-      			    margin-top: -4px;
-      			    content: '';
-      				border-radius: 50%;
-      				width: 8px;
-      				height: 8px; 
-      				background: #fff;
-      				border: 1px solid #000;
-      			} */ }
+      background: #004f27; }
       article div.bar div.left:after {
         position: absolute;
         top: 0;

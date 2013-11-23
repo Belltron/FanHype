@@ -1,92 +1,33 @@
-<!DOCTYPE html>
 {% autoescape true %}
 <html>
 <head>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
   <link href='css/game.css' rel='stylesheet' type='text/css'>
+  <style>
+    .team_one {
+      color: {{team_one_color}};
+    }
+
+    .team_two {
+      color: {{team_two_color}};
+    }
+  </style>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
     <script>
-  var map, team_one_points, team_two_points, team_one_map, team_two_map;
-  var team_one_points = [];
-  var team_two_points = [];
 
-  var team_one_gradient = [
-    'rgba(0, 255, 255, 0)',
-    'rgba(0, 255, 255, 1)',
-    'rgba(0, 191, 255, 1)',
-    'rgba(0, 127, 255, 1)',
-    'rgba(0, 63, 255, 1)',
-    'rgba(0, 0, 255, 1)',
-    'rgba(0, 0, 223, 1)',
-    'rgba(0, 0, 191, 1)',
-    'rgba(0, 0, 159, 1)',
-    'rgba(0, 0, 127, 1)',
-    'rgba(63, 0, 91, 1)',
-    'rgba(127, 0, 63, 1)',
-    'rgba(191, 0, 31, 1)',
-    'rgba(255, 0, 0, 1)'
-  ];
-
-  var style = [{"featureType":"water","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"landscape","stylers":[{"color":"#ffffff"}]},{"featureType":"road","stylers":[{"saturation":-100},{"lightness":40}]},{"featureType":"road.highway","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]}];
-
-  function initialize() {
-    var mapOptions = {
-        zoom: 4,
-        center: new google.maps.LatLng(39.8282, -98.5795),
-        mapTypeId: google.maps.MapTypeId.MAP,
-        styles: style
-    };
-
-    map = new google.maps.Map(document.getElementById('map_canvas'),
-        mapOptions);
-
-    json = $('#point_data').html() 
-    var obj = jQuery.parseJSON( json );
-    
-    for (var i=0; i<obj.team_one_coordinates.length; i++){
-         team_one_points.push(new google.maps.LatLng(obj.team_one_coordinates[i][0], obj.team_one_coordinates[i][1]));
-    };
-    for (var i=0; i<obj.team_two_coordinates.length; i++){
-         team_two_points.push(new google.maps.LatLng(obj.team_two_coordinates[i][0], obj.team_two_coordinates[i][1]));
-    };
-
-
-    var one_points = new google.maps.MVCArray(team_one_points);
-    team_one_map = new google.maps.visualization.HeatmapLayer({
-        data: one_points,
-        radius: 20,
-        gradient: null
-    });
-    team_one_map.setMap(map);
-
-
-    var two_points = new google.maps.MVCArray(team_two_points);
-    teamp_two_map = new google.maps.visualization.HeatmapLayer({
-        data: two_points,
-        radius: 15,
-        gradient: team_one_gradient
-    });
-    teamp_two_map.setMap(map);
-  };
-
-  google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </head>
 <body>
   <nav>
-    <h1 id="mark"><a href="../">fanhype</a></h1>
-
+    <h1 id="mark"><a href="/">fanhype</a></h1>
     <ul>
-      <li><a href="../">HOME</a></li>
-      <li><a href="./">GAMES</a></li>
-      <li><a href="#">ABOUT</a></li>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/newgame">NEW GAME</a></li>
     </ul>
   </nav>
-
   <hr>
-
   <div id="content">
     <div id="game_info">
       <div id="info">
@@ -127,6 +68,7 @@
             }
           </div>
         <div id="map_canvas"></div>
+        
       </div>
       <div class="rule"> </div>
       <div id="stats">
@@ -155,138 +97,139 @@
     <div id="top_tweets">
       <h1>Top Tweets</h1>
       <div id="top_tweet_left">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+        <img src="{{ team_one_top.imageUrl }}" alt="{{ team_one_top.userName }}">
         <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
-            [-97.14821387,31.53009687]</p>
-          <p>Followers: 302</p>
-          <p>Friends: 131</p>
+          <p class="screen_name"><a href="https://twitter.com/{{ team_one_top.userName }}">@{{ team_one_top.userName }}</a></p>
+          <p class="right_info">{{team_one_top.createdAt}}<br/></p>
+          <p>Followers: {{team_one_top.followerCount}}</p>
 
         </div>
         <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
-          baylor sucks and OU is so great wow
-          <a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
+          {{ team_one_top.tweetText }}
         </p>
         <hr>
-        <h2 style="color:#b20837;">Oklahoma hype score: 30</h2>
+        <h2 class="team_one">{{ team_one_top.teamName }} hype score: {{ team_one_top.hypeScore }}</h2>
       </div>
       <div id="top_tweet_right">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+        <img src="{{ team_two_top.imageUrl }}" alt="{{ team_two_top.userName }}">
         <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p class="right_info">Thu Nov 07 20:20:48 +0000 2013<br/>
-            [-97.14821387,31.53009687]</p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
+          <p class="screen_name"><a href="https://twitter.com/{{ team_two_top.userName }}">@{{ team_two_top.userName }}</a></p>
+          <p class="right_info">{{team_two_top.createdAt}}<br/></p>
+          <p>Followers: {{team_two_top.followerCount}}</p>
 
         </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23sicem">
-          #sicem</a> bears! woo! yeah go bears
-          <a href="https://twitter.com/search?q=%23sicou">#sicou</a>
-          <a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+        <p class="tweet_text">{{ team_two_top.tweetText }}
         </p>
         <hr>
-        <h2 style="color:#004933;">Baylor hype score: 92</h2>
+        <h2 class="team_two">{{ team_two_top.teamName }} hype score: {{ team_two_top.hypeScore }}</h2>
       </div>
     </div>
     <hr>
     <div id="stream">
       <h1>Latest Tweets</h1>
+
+      {% for tweet in latest_tweets %}
+      {% if tweet.teamName == team_one_name  %}
       <div class="stream_tweet left">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
-        <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
-        </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
-          baylor sucks and OU is so great wow
-          <a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
-        </p>
-      </div>
+      {% else %}
       <div class="stream_tweet right">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
+      {% endif %}
+        <img src="{{tweet.imageUrl}}">
         <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
+          <p class="screen_name">
+            <a href="{{tweet.userName}}">@{{tweet.userName}}</a></p>
+          <p>Followers: {{tweet.followerCount}}</p>
+          <p>Hype: {{tweet.hypeScore}}</p>
         </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23sicem">#sicem</a>
-          bears! woo! yeah go bears
-          <a href="https://twitter.com/search?q=%23sicou">#sicou</a>
-          <a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
+        {% if tweet.teamName == team_one_name  %}
+        <p class="tweet_text team_one">
+        {% else %}
+        <p class="tweet_text team_two">
+        {% endif %}
+          {{tweet.tweetText}}
         </p>
       </div>
-      <div class="stream_tweet left">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
-        <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
-        </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
-          baylor sucks and OU is so great wow
-          <a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
-        </p>
-      </div>
-      <div class="stream_tweet right">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
-        <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
-        </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23sicem">
-          #sicem</a> bears! woo! yeah go bears
-          <a href="https://twitter.com/search?q=%23sicou">#sicou</a>
-          <a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
-        </p>
-      </div>
-      <div class="stream_tweet right">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
-        <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
-        </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23sicem">
-          #sicem</a> bears! woo! yeah go bears
-          <a href="https://twitter.com/search?q=%23sicou">#sicou</a>
-          <a href="https://twitter.com/search?q=%23everyoneinblack">#everyoneinblack</a>
-        </p>
-      </div>
-      <div class="stream_tweet left">
-        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/_williamguerra/128.jpg" alt="_williamguerra">
-        <div class="user_info">
-          <p class="screen_name"><a href="https://twitter.com/_williamguerra">@_williamguerra</a></p>
-          <p>Followers: 20910</p>
-          <p>Friends: 5431</p>
-
-        </div>
-        <p class="tweet_text">
-          <a href="https://twitter.com/search?q=%23beatbaylor">#beatbaylor</a> 
-          baylor sucks and OU is so great wow
-          <a href="https://twitter.com/search?q=%23boomersooner">#boomersooner</a>
-        </p>
-      </div>
+      {% endfor %}
     </div>
 
   </div>
 
   <script type="text/javascript">
+      var map, team_one_map, team_two_map;
+  var team_one_points = [];
+  var team_two_points = [];
+
+  var team_one_gradient = [
+    'rgba(255, 255, 0, 0)',
+    'rgba(255, 255, 0, 1)',
+    'rgba(255, 127, 0, 1)',
+    'rgba(255, 0, 0, 1)'
+  ];
+
+  var team_two_gradient = [
+    'rgba(0, 255, 255, 0)',
+    'rgba(0, 255, 255, 1)',
+    'rgba(0, 0, 255, 1)',
+    'rgba(255, 0, 255, 1)'
+  ];
+
+  var style = [{"featureType":"water","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"landscape","stylers":[{"color":"#ffffff"}]},{"featureType":"road","stylers":[{"saturation":-100},{"lightness":40}]},{"featureType":"road.highway","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"transit","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]}];
+
+  function initialize() {
+    var mapOptions = {
+        zoom: 4,
+        center: new google.maps.LatLng(39.8282, -98.5795),
+        mapTypeId: google.maps.MapTypeId.MAP,
+        styles: style
+    };
+
+    map = new google.maps.Map(document.getElementById('map_canvas'),
+        mapOptions);
+
+    json = $('#point_data').html() 
+    var obj = jQuery.parseJSON( json );
+
+    var lat_sum = 0;
+    var lon_sum = 0;
+
+    for (var i=0; i<obj.team_one_coordinates.length; i++){
+         team_one_points.push(new google.maps.LatLng(obj.team_one_coordinates[i][0], obj.team_one_coordinates[i][1]));
+         lat_sum += obj.team_one_coordinates[i][0];
+         lon_sum += obj.team_one_coordinates[i][1];
+    };
+    for (var i=0; i<obj.team_two_coordinates.length; i++){
+         team_two_points.push(new google.maps.LatLng(obj.team_two_coordinates[i][0], obj.team_two_coordinates[i][1]));
+         lat_sum += obj.team_two_coordinates[i][0];
+         lon_sum += obj.team_two_coordinates[i][1];
+    };
+
+    var num_points = (obj.team_one_coordinates.length + obj.team_two_coordinates.length)
+    map.setCenter(new google.maps.LatLng((lat_sum/num_points),(lon_sum/num_points)));
+    map.setZoom(5);
+    console.log(((lat_sum/num_points) + ',' + (lon_sum/num_points)))
+
+    var one_points = new google.maps.MVCArray(team_one_points);
+    team_one_map = new google.maps.visualization.HeatmapLayer({
+        data: one_points,
+        radius: 20,
+        opacity: 0.9,
+        gradient: team_one_gradient
+    });
+    team_one_map.setMap(map);
+
+
+    var two_points = new google.maps.MVCArray(team_two_points);
+    teamp_two_map = new google.maps.visualization.HeatmapLayer({
+        data: two_points,
+        radius: 20,
+        opacity: 1,
+        gradient: team_two_gradient
+    });
+    teamp_two_map.setMap(map);
+  };
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
     $(function () {
           $('#graph').highcharts({
               chart: {
@@ -299,7 +242,7 @@
                   text: null
               },
               xAxis: {
-                  categories: ['Oklahoma', '{{team_one_name}}'],
+                  categories: ['{{team_one_name}}', '{{team_two_name}}'],
                   color: '#000000',
                   title: {
                       text: null
@@ -359,7 +302,7 @@
           var teamTwo = parseFloat($(this).find('.right').text());
           var fullWidth = $(this).width();
           var percentage = (teamOne / (teamOne + teamTwo)) * 100;
-          var teamOnePercentage = Math.floor(percentage);
+          var teamOnePercentage = Math.round(percentage);
           var teamTwoPercentage = 100-teamOnePercentage;
           $(this).find('.left').delay(750).animate({width:fullWidth * (teamOnePercentage/100)}, 1000);
           $(this).find('.left').text(teamOnePercentage + "%")

@@ -15,8 +15,8 @@
 					<span></span>
 					<span></span>
 					<div class="bar">
-						<div class="right">{{game.teamOneHashTags}}</div>
-						<div class="left">{{game.teamTwoHashTags}}</div>
+						<div class="right" style="background: {{game.teamTwoColor}};">{{game.teamTwoHashTags}}</div>
+						<div class="left" style="background: {{game.teamOnColor}};">{{game.teamOneHashTags}}</div>
 					</div>
 				</div>
 				<div id="left_team">
@@ -26,10 +26,22 @@
 					<img src="{{game.teamTwoImage}}" alt="{{ game.teamTwoName }}" id="right_logo">
 				</div>
 			</div>
-			<div style="text-align:center;">
-				<form action="/deletegame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
-					<button class="submit_button" type="submit">Delete this game</button>
-				</form>
+				<div style="width:33%; float:left; text-align:center;">
+					<form action="/deletegame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
+						<button class="submit_button" type="submit">Delete this game</button>
+					</form>
+				</div>
+				<div style="width:33%; float:left; text-align:center;">
+					<form action="/cleargame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
+						<button class="submit_button" type="submit">Clear data</button>
+					</form>
+				</div>
+				<div style="width:33%; float:left; text-align:left;">
+					<form action="/import" enctype="multipart/form-data" method="post">
+						<input type="file" name="tweets"/>
+						<button class="submit_button" type="submit">Import tweets</button>
+					</form>
+				</div>
 			</div>
 			<br />
 		    <hr>

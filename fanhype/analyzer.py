@@ -63,31 +63,3 @@ def calculateHypeJson(tweets, teamOneTags, teamTwoTags):
         tempCountTwo = (1 + teamTwoTagScore * float(tweet['user']['followers_count'])/1000) * tempCountTwo
         
     return (tempCountOne,tempCountTwo)
-        #logging.info(tempCountTwo)
-        
-
-        #if tempCountOne == 1:
-            #print "AHHHHHHHH"
-        #tempCountOne = 5# * tempCountOne
-        #tempCountTwo = 100 * tempCountTwo
-
-
-        #tempCountOne = int(tweet['user']['followers_count'])
-        #tempCountTwo = int(tweet['user']['followers_count'])
-        
-
-    """    if tempCountOne >= 1 and tempCountTwo == 0:
-            teamOneTotal += tempCountOne
-        if tempCountOne == 0 and tempCountTwo >= 1:
-            teamTwoTotal += tempCountTwo
-                
-    total = teamOneTotal + teamTwoTotal
-
-    if total != 0:
-        teamOneHype = float(teamOneTotal) / total * 100
-        teamTwoHype = float(teamTwoTotal) / total * 100
-    else:
-        teamOneHype = 0
-        teamTwoHype = 0
-    
-    return (teamOneTotal, teamOneHype, teamTwoTotal, teamTwoHype)"""
