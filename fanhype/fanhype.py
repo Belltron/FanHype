@@ -52,6 +52,8 @@ class Game(webapp2.RequestHandler):
         team_one_top = team_one_top_list[0] if len(team_one_top_list) > 0 else {}
         team_two_top = team_two_top_list[0] if len(team_two_top_list) > 0 else {}
 
+        latest_tweets = []
+
         template_values = {
             'game_title': hypeTable.gameTitle,
             'game_time': hypeTable.gameTime,
@@ -94,13 +96,14 @@ def saveNewTweets(tweets):
     geoData = models.GeoData.query().fetch()
 
     #This code used for resetting all values
-    for row in geoData:
+    """for row in geoData:
         row.coordinates = ""
     for row in hypeTables:
         row.teamOneHype = 0
         row.teamTwoHype = 0
         row.teamOneTweetTotal = 0
-        row.teamTwoTweetTotal = 0
+        row.teamTwoTweetTotal = 0"""
+        
     for tweet in tweets:
         tweet['hypescore'] = 0
         tweet['teamname'] = ""
@@ -142,25 +145,26 @@ def addTweetCoordinates(tweet, geoData, teamName):
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
 
 def calculateTopTweet(tweets):
-    top_tweet = max(tweets, key=lambda x:x['hypescore'])
-    if top_tweet:
-        topTweet = models.TopTweet.query(models.TopTweet.teamName == top_tweet['teamname']).fetch();
-        
-        if len(topTweet) == 0:
-            topTweet = models.TopTweet()
-        else:
-            topTweet = topTweet[0]
-            if float(topTweet.hypeScore) >= float(top_tweet['hypescore']):
-                return
-        
-        topTweet.teamName = top_tweet['teamname']
-        topTweet.imageUrl = top_tweet['user']['profile_img_url']
-        topTweet.tweetText = top_tweet['text']
-        topTweet.userName = top_tweet['user']['screen_name']
-        topTweet.hypeScore = str(top_tweet['hypescore'])
-        topTweet.followerCount = str(top_tweet['user']['followers_count'])
-        topTweet.createdAt = top_tweet['created_at']
-        topTweet.put()
+    if tweets:
+        top_tweet = max(tweets, key=lambda x:x['hypescore'])
+        if top_tweet:
+            topTweet = models.TopTweet.query(models.TopTweet.teamName == top_tweet['teamname']).fetch();
+            
+            if len(topTweet) == 0:
+                topTweet = models.TopTweet()
+            else:
+                topTweet = topTweet[0]
+                if float(topTweet.hypeScore) >= float(top_tweet['hypescore']):
+                    return
+            
+            topTweet.teamName = top_tweet['teamname']
+            topTweet.imageUrl = top_tweet['user']['profile_img_url']
+            topTweet.tweetText = top_tweet['text']
+            topTweet.userName = top_tweet['user']['screen_name']
+            topTweet.hypeScore = str(top_tweet['hypescore'])
+            topTweet.followerCount = str(top_tweet['user']['followers_count'])
+            topTweet.createdAt = top_tweet['created_at']
+            topTweet.put()
 
 
 

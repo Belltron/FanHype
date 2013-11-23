@@ -106,22 +106,11 @@ class Import(webapp2.RequestHandler):
 
 		tweets = []
 		for line in tweet_string:
-			tweets.append (json.loads (line.strip()))
+			try:
+				tweets.append (json.loads (line.strip()))
+			except:
+				print "Error decoding JSON: " + str(line)
 
-		
 		fanhype.saveNewTweets (tweets)
 		time.sleep(1)
 		self.redirect("/newgame")
-		#hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()
-
-		#[row.key.delete() for row in hypeTable]
-
-		#coordinates = models.GeoData.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
-		#[row.key.delete() for row in coordinates]
-		
-		#time.sleep(1)
-		#self.redirect("/newgame")
-
-
-
-
