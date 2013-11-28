@@ -17,7 +17,8 @@ def read_data(filename):
 	try:
 		with open(filename) as f:
 			for line in f:
-				data.append (json.loads (line.strip()))
+				if line != '\n':
+					data.append (json.loads (line.strip()))
 	except:
 		print "Error reading file: "+filename
 		return []

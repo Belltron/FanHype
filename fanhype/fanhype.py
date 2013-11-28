@@ -9,8 +9,6 @@ import jinja2
 import os
 from query_tweet_collector import TweetCollector
 import models
-import tweepy
-from tweepy import OAuthHandler
 import config
 import analyzer
 import game_control
@@ -118,10 +116,7 @@ def saveNewTweets(tweets):
         team_two_tags = [tag.lower() for tag in team_two_tags]
         for tweet in tweets:
             hypeScore = analyzer.calculateHypeJson(tweet, team_one_tags, team_two_tags)
-
-            if hypeScore[0] == hypeScore[1]:
-                print '****', hypeScore[0]
-            elif hypeScore[0] > hypeScore[1]:
+            if hypeScore[0] > hypeScore[1]:
                 tweet['hypescore'] = hypeScore[0]
                 tweet['teamname'] = hypeTable.teamOneName
                 hypeTable.teamOneHype += hypeScore[0]
@@ -138,8 +133,10 @@ def saveNewTweets(tweets):
     for hypeTable in hypeTables:
         team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
         calculateTopTweet(team_one_game_tweets)
+        getLatestTweets(team_one_game_tweets, hypeTable.teamOneName)
         team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
         calculateTopTweet(team_two_game_tweets)
+        getLatestTweets(team_two_game_tweets, hypeTable.teamTwoName)
 
 
     [row.put() for row in geoData]
@@ -152,7 +149,7 @@ def addTweetCoordinates(tweet, geoData, teamName):
             if data.teamName == teamName:
                 data.coordinates += str(coordinates[0]) + "," + str(coordinates[1]) + "|"
                 
-def getLatestTweets(tweets):
+def getLatestTweets(tweets, teamName):
 
     team = ""
     if len(tweets) >= 5:
@@ -162,7 +159,7 @@ def getLatestTweets(tweets):
         lastFiveTweets = tweets[-tweetsLength:] 
     team = (lastFiveTweets[-1])['teamname']
             
-    dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == team).fetch()
+    dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == teamName).fetch()
     tempTweets = dataStoreLatestTweets
     [row.key.delete() for row in tempTweets]   
     
