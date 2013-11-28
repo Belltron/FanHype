@@ -27,6 +27,11 @@ class NewGame(webapp2.RequestHandler):
 
     def post(self):
 
+		password = cgi.escape(self.request.get('password'))
+		if password != "nahdude":
+			self.redirect("/newgame")
+			return;
+
 		teamOneName = cgi.escape(self.request.get('teamOneName'))
 		teamTwoName = cgi.escape(self.request.get('teamTwoName'))
 		hypeTable = models.HypeTable()
@@ -62,6 +67,12 @@ class NewGame(webapp2.RequestHandler):
 
 class ClearGameData(webapp2.RequestHandler):
 	def post(self):
+
+		password = cgi.escape(self.request.get('password'))
+		if password != "nahdude":
+			self.redirect("/newgame")
+			return;
+
 		team_one_name = self.request.get('one')
 		team_two_name = self.request.get('two')
 		hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()
@@ -89,6 +100,12 @@ class ClearGameData(webapp2.RequestHandler):
 
 class DeleteGame(webapp2.RequestHandler):
 	def post(self):
+
+		password = cgi.escape(self.request.get('password'))
+		if password != "nahdude":
+			self.redirect("/newgame")
+			return;
+
 		team_one_name = self.request.get('one')
 		team_two_name = self.request.get('two')
 		hypeTable = models.HypeTable.query(ndb.OR(models.HypeTable.teamOneName == team_one_name, models.HypeTable.teamOneName == team_two_name)).fetch()
@@ -105,6 +122,12 @@ class DeleteGame(webapp2.RequestHandler):
 
 class Import(webapp2.RequestHandler):
 	def post(self):
+
+		password = cgi.escape(self.request.get('password'))
+		if password != "nahdude":
+			self.redirect("/newgame")
+			return;
+		
 		tweets_json = cgi.escape(self.request.get('tweets'))
 		tweet_string = str(tweets_json).split("\n")
 

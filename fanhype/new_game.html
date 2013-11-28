@@ -6,6 +6,14 @@
 		<link href='css/game.css' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
+		<nav>
+			<h1 id="mark"><a href="/">fanhype</a></h1>
+			<ul>
+	      <li><a href="/">HOME</a></li>
+	      <li><a href="/newgame">NEW GAME</a></li>
+			</ul>
+		</nav>
+		<hr>
 		{% for game in games %}
 			<div id="game_info">
 				<div id="info">
@@ -29,17 +37,20 @@
 				<div style="width:33%; float:left; text-align:center;">
 					<form action="/deletegame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
 						<button class="submit_button" type="submit">Delete this game</button>
+						<p>Password:</p><input type="password" name="password"><br><br>
 					</form>
 				</div>
 				<div style="width:33%; float:left; text-align:center;">
 					<form action="/cleargame?one={{game.teamOneName}}&two={{game.teamTwoName}}" method="post">
 						<button class="submit_button" type="submit">Clear data</button>
+						<p>Password:</p><input type="password" name="password"><br><br>
 					</form>
 				</div>
 				<div style="width:33%; float:left; text-align:left;">
 					<form action="/import" enctype="multipart/form-data" method="post">
 						<input type="file" name="tweets"/>
 						<button class="submit_button" type="submit">Import tweets</button>
+						<p>Password:</p><input type="password" name="password"><br><br>
 					</form>
 				</div>
 			</div>
@@ -67,8 +78,9 @@
 	    		<p>Game Title (Ex: "Baylor @ Oklahoma):</p><input type="text" name="gameTitle"><br><br>
 	    		<p>Game Time (Ex: "Thursday, November 7, 6:30 PM (CT)"):</p><input type="text" name="gameTime"><br><br>
 	    		<p>Game Location (Ex: "Floyd Casey Stadium, Waco, Texas"):</p><input type="text" name="gameLocation"><br><br>
+	    		<p>Password:</p><input type="password" name="password"><br><br>
 		    	<button class="submit_button" type="submit">Create New Game</button>
-
+				
 			</form>
 			<br />
 		</div>
