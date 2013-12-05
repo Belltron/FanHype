@@ -153,15 +153,23 @@ def saveNewTweets(tweets):
             team_one_tags = [tag.lower() for tag in hypeTable.teamOneHashTags.split(',')]
             team_two_tags = [tag.lower() for tag in hypeTable.teamTwoHashTags.split(',')]
             hypeScore = analyzer.calculateHypeJson(tweet, team_one_tags, team_two_tags)
-            if hypeScore[0] > hypeScore[1]:
+
+            isTeamOne = False
+            isTeamTwo = False
+            for hashtag in tweet['entities']['hashtags']:
+                if hashtag['text'].lower() in team_one_tags:
+                    isTeamOne = True
+                if hashtag['text'].lower() in team_two_tags:
+                    isTeamTwo = True
+
+            if isTeamOne and not isTeamTwo:
                 tweet['hypescore'] = hypeScore[0]
                 tweet['teamname'] = hypeTable.teamOneName
                 history_hype_one += hypeScore[0]
-                team_one_name = hypeTable.teamOneName
                 hypeTable.teamOneHype += hypeScore[0]
                 hypeTable.teamOneTweetTotal += 1
                 addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
-            else:
+            if isTeamTwo and not isTeamOne:
                 tweet['hypescore'] = hypeScore[1]
                 tweet['teamname'] = hypeTable.teamTwoName
                 history_hype_two += hypeScore[1]

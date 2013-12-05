@@ -83,6 +83,8 @@ class ClearGameData(webapp2.RequestHandler):
 			row.teamTwoHype = 0
 			row.teamOneTweetTotal = 0
 			row.teamTwoTweetTotal = 0
+			row.gameTimeHistory = ""
+			row.gameHypeHistory = ""
 			row.put()
 
 		coordinates = models.GeoData.query(ndb.OR(models.GeoData.teamName == team_one_name, models.GeoData.teamName == team_two_name)).fetch()
