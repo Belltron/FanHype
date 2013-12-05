@@ -1,0 +1,40 @@
+** The password for everything is 'nahdude' (without quotes) **
+** If you are reading this, and you aren't Cav, don't be a jerk and ruin our production app! **
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Oklahoma
+	Hashtags: oklahoma,boomersooner,gosooners,beatbaylor,ou
+	Color:    #b20837
+	Image:    http://i.imgur.com/pmGqPtE.png
+
+Baylor
+	Hashtags: everyoneinblack,sicou,baylor,sicem,sicembears
+	Color:    #004933
+	Image:    http://i.imgur.com/pK6joAP.png
+
+Title:    Oklahoma @ Baylor
+Time:     Thursday, November 7, 6:30 PM (CT)
+Location: Floyd Casey Stadium, Waco, Texas
+
+Corresponding game file (Do not enter until after game is created):
+tweet_util/baylor_oklahoma.json
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Nebraska
+	Hashtags: nebraska,huskers,gobigred,cornhusker
+	Color:    #CC0000
+	Image:    http://i.imgur.com/eTXlhq7.gif
+
+Michigan
+	Hashtags: michigan,goblue,bighouse,beatnebraska,wolverines  
+	Color:    #00274c
+	Image:    http://i.imgur.com/wJB3ceE.png
+
+Title:    Nebraska @ Michigan
+Time:     Saturday, November 9, 2:30 PM (CT)
+Location: Michigan Stadium, Ann Arbor, Michigan
+
+Corresponding game file (Do not enter until after game is created):
+tweet_util/nebraska_michigan.json

@@ -32,6 +32,7 @@ class HypeTable(ndb.Model):
     teamTwoHashTags = ndb.StringProperty()
     teamOneHype = ndb.FloatProperty()
     teamTwoHype = ndb.FloatProperty()
+    
     teamOneName = ndb.StringProperty()
     teamTwoName = ndb.StringProperty()
     teamOneTweetTotal = ndb.IntegerProperty()
@@ -43,6 +44,8 @@ class HypeTable(ndb.Model):
     gameTitle = ndb.StringProperty()
     gameTime = ndb.StringProperty()
     gameLocation = ndb.StringProperty()
+    gameHypeHistory = ndb.StringProperty(indexed=False)
+    gameTimeHistory = ndb.StringProperty(indexed=False)
 
 class GeoData(ndb.Model):
     coordinates = ndb.StringProperty(indexed=False)
