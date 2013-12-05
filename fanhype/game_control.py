@@ -50,6 +50,8 @@ class NewGame(webapp2.RequestHandler):
 		hypeTable.teamTwoHype = 0
 		hypeTable.teamOneTweetTotal = 0
 		hypeTable.teamTwoTweetTotal = 0
+		hypeTable.gameHypeHistory = ""
+		hypeTable.gameTimeHistory = ""
 		hypeTable.put()
 
 		geoData = models.GeoData()

@@ -7,13 +7,19 @@ import json
 from google.appengine.ext import ndb, db
 import jinja2
 import os
-from query_tweet_collector import TweetCollector
 import models
 import config
 import analyzer
 import game_control
 import time
+from datetime import datetime
 import logging
+from email.utils import parsedate
+from pytz import timezone
+
+tweet_time_format = "%a %b %d %H:%M:%S +0000 %Y"
+central = timezone('US/Central')
+utc = timezone('UTC')
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -52,6 +58,7 @@ class Game(webapp2.RequestHandler):
         team_one_top = team_one_top_list[0] if len(team_one_top_list) > 0 else {}
         team_two_top = team_two_top_list[0] if len(team_two_top_list) > 0 else {}
 
+
         latest_tweets = models.LatestTweets.query(ndb.OR(models.LatestTweets.teamName == team_one_name, models.LatestTweets.teamName == team_two_name)).fetch()
         random.shuffle(latest_tweets)
 
@@ -75,7 +82,9 @@ class Game(webapp2.RequestHandler):
             'team_two_tweets': team_two_points,
             'team_one_top': team_one_top,
             'team_two_top': team_two_top,
-            'latest_tweets': latest_tweets
+            'latest_tweets': latest_tweets,
+            'hype_history': hypeTable.gameHypeHistory,
+            'time_history': hypeTable.gameTimeHistory
         }
         self.response.write(template.render(template_values))
 
@@ -87,11 +96,21 @@ class SaveTweet(webapp2.RequestHandler):
 
     def post(self):        
         tweets = json.loads(self.request.body)
+     
         if len(tweets) == 0:
             return;
-
+            
         saveNewTweets(tweets)
 
+def get_date_time(time_str):
+    date_time = datetime.strptime(time_str, tweet_time_format)
+    date_time = utc.localize(date_time)
+    return central.normalize(date_time.astimezone(central))
+
+def time_string(date_time):
+    return str(date_time.hour) + ":" + str(date_time.minute)
+
+        
 def saveNewTweets(tweets):
     hypeTables = models.HypeTable.query().fetch()
     geoData = models.GeoData.query().fetch()
@@ -109,22 +128,43 @@ def saveNewTweets(tweets):
         tweet['hypescore'] = 0
         tweet['teamname'] = ""
 
-    for hypeTable in hypeTables:
-        team_one_tags = hypeTable.teamOneHashTags.split(',')
-        team_two_tags = hypeTable.teamTwoHashTags.split(',')
-        team_one_tags = [tag.lower() for tag in team_one_tags]
-        team_two_tags = [tag.lower() for tag in team_two_tags]
-        for tweet in tweets:
+    minute_hype_one = 0
+    minute_hype_two = 0
+    
+    if tweets:
+        current_time = get_date_time(tweets[0]['created_at'])
+        history_time_string = ""
+        history_hype_string = ""
+        history_hype_one = 0
+        history_hype_two = 0
+    
+    team_one_name = ""
+    for tweet in tweets:
+        tweet_time = get_date_time(tweet['created_at'])
+        if (tweet_time - current_time).total_seconds() > 600:
+            current_time = tweet_time
+            history_time_string += time_string(tweet_time) + ','
+            delta_hype = history_hype_one/(history_hype_one + history_hype_two) * 100
+            history_hype_string += str(int(delta_hype)) + ","
+            history_hype_one = 0
+            history_hype_two = 0
+
+        for hypeTable in hypeTables:
+            team_one_tags = [tag.lower() for tag in hypeTable.teamOneHashTags.split(',')]
+            team_two_tags = [tag.lower() for tag in hypeTable.teamTwoHashTags.split(',')]
             hypeScore = analyzer.calculateHypeJson(tweet, team_one_tags, team_two_tags)
             if hypeScore[0] > hypeScore[1]:
                 tweet['hypescore'] = hypeScore[0]
                 tweet['teamname'] = hypeTable.teamOneName
+                history_hype_one += hypeScore[0]
+                team_one_name = hypeTable.teamOneName
                 hypeTable.teamOneHype += hypeScore[0]
                 hypeTable.teamOneTweetTotal += 1
                 addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
             else:
                 tweet['hypescore'] = hypeScore[1]
                 tweet['teamname'] = hypeTable.teamTwoName
+                history_hype_two += hypeScore[1]
                 hypeTable.teamTwoHype += hypeScore[1]
                 hypeTable.teamTwoTweetTotal += 1
                 addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
@@ -132,12 +172,14 @@ def saveNewTweets(tweets):
     #Find the top tweet of the new tweets
     for hypeTable in hypeTables:
         team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
+        if len(team_one_game_tweets) > 25:
+            hypeTable.gameHypeHistory += history_hype_string
+            hypeTable.gameTimeHistory += history_time_string
         calculateTopTweet(team_one_game_tweets)
         getLatestTweets(team_one_game_tweets, hypeTable.teamOneName)
         team_two_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamTwoName]
         calculateTopTweet(team_two_game_tweets)
         getLatestTweets(team_two_game_tweets, hypeTable.teamTwoName)
-
 
     [row.put() for row in geoData]
     [row.put() for row in hypeTables]
@@ -189,7 +231,7 @@ def getLatestTweets(tweets, teamName):
             dst.put()
     else:
         dataStoreLatestTweets += latestTweets
-        putLatest = sorted(dataStoreLatestTweets, key = lambda t : time.strptime(t.createdAt, "%a %b %d %H:%M:%S +0000 %Y"))
+        putLatest = sorted(dataStoreLatestTweets, key = lambda t : time.strptime(t.createdAt, tweet_time_format))
         for dst in putLatest[-5:]:
             dst.put()    
 
