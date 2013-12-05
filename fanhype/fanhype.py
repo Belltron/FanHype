@@ -58,7 +58,6 @@ class Game(webapp2.RequestHandler):
         team_one_top = team_one_top_list[0] if len(team_one_top_list) > 0 else {}
         team_two_top = team_two_top_list[0] if len(team_two_top_list) > 0 else {}
 
-
         latest_tweets = models.LatestTweets.query(ndb.OR(models.LatestTweets.teamName == team_one_name, models.LatestTweets.teamName == team_two_name)).fetch()
         random.shuffle(latest_tweets)
 

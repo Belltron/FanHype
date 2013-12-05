@@ -28,7 +28,7 @@ def get_tweets():
 
 
 def send_tweets():
-    url = 'http://localhost:9080/savetweet'
+    url = 'http://localhost:8080/savetweet'
 
     tweets = get_tweets()
     data = json.dumps(tweets)
