@@ -127,9 +127,6 @@ def saveNewTweets(tweets):
         tweet['hypescore'] = 0
         tweet['teamname'] = ""
 
-    minute_hype_one = 0
-    minute_hype_two = 0
-    
     if tweets:
         current_time = get_date_time(tweets[0]['created_at'])
         history_time_string = ""
@@ -137,7 +134,6 @@ def saveNewTweets(tweets):
         history_hype_one = 0
         history_hype_two = 0
     
-    team_one_name = ""
     for tweet in tweets:
         tweet_time = get_date_time(tweet['created_at'])
         if (tweet_time - current_time).total_seconds() > 600:
