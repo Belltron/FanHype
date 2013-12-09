@@ -213,7 +213,7 @@ def getLatestTweets(tweets, teamName):
         latestTweet = models.LatestTweets()
         if 'teamname' in lTweet:
             latestTweet.teamName = lTweet['teamname']
-        latestTweet.imageUrl = lTweet['user']['profile_img_url']
+        latestTweet.imageUrl = lTweet['user']['profile_image_url']
         latestTweet.tweetText = lTweet['text']
         latestTweet.userName = lTweet['user']['screen_name']
         if 'hypescore' in lTweet:
@@ -252,7 +252,7 @@ def calculateTopTweet(tweets):
                     return
             
             topTweet.teamName = top_tweet['teamname']
-            topTweet.imageUrl = top_tweet['user']['profile_img_url']
+            topTweet.imageUrl = top_tweet['user']['profile_image_url']
             topTweet.tweetText = top_tweet['text']
             topTweet.userName = top_tweet['user']['screen_name']
             topTweet.hypeScore = str(top_tweet['hypescore'])
