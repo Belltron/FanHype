@@ -16,6 +16,7 @@ from datetime import datetime
 import logging
 from email.utils import parsedate
 from pytz import timezone
+import math
 
 tweet_time_format = "%a %b %d %H:%M:%S +0000 %Y"
 central = timezone('US/Central')
@@ -140,7 +141,7 @@ def saveNewTweets(tweets):
             current_time = tweet_time
             history_time_string += time_string(tweet_time) + ','
             delta_hype = 0
-            if history_hype_one + history_hype_two > 0:
+            if history_hype_one + history_hype_two != 0:
                 delta_hype = history_hype_one/(history_hype_one + history_hype_two) * 100
             history_hype_string += str(int(delta_hype)) + ","
             history_hype_one = 0
@@ -150,6 +151,8 @@ def saveNewTweets(tweets):
             team_one_tags = [tag.lower() for tag in hypeTable.teamOneHashTags.split(',')]
             team_two_tags = [tag.lower() for tag in hypeTable.teamTwoHashTags.split(',')]
             hypeScore = analyzer.calculateHypeJson(tweet, team_one_tags, team_two_tags)
+            hs1 = math.fabs(hypeScore[0])
+            hs2 = math.fabs(hypeScore[1])
 
             isTeamOne = False
             isTeamTwo = False
@@ -160,21 +163,19 @@ def saveNewTweets(tweets):
                     isTeamTwo = True
 
             if isTeamOne and not isTeamTwo:
-                tweet['hypescore'] = hypeScore[0]
+                tweet['hypescore'] = hs1
                 tweet['teamname'] = hypeTable.teamOneName
-                history_hype_one += hypeScore[0]
-                hypeTable.teamOneHype += hypeScore[0]
+                history_hype_one += hs1
+                hypeTable.teamOneHype += hs1
                 hypeTable.teamOneTweetTotal += 1
                 addTweetCoordinates(tweet, geoData, hypeTable.teamOneName)
             if isTeamTwo and not isTeamOne:
-                tweet['hypescore'] = hypeScore[1]
+                tweet['hypescore'] = hs2
                 tweet['teamname'] = hypeTable.teamTwoName
-                history_hype_two += hypeScore[1]
-                hypeTable.teamTwoHype += hypeScore[1]
+                history_hype_two += hs2
+                hypeTable.teamTwoHype += hs2
                 hypeTable.teamTwoTweetTotal += 1
-                addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)\
-
-    print history_time_string
+                addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
 
     #Find the top tweet of the new tweets
     for hypeTable in hypeTables:

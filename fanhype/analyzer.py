@@ -42,6 +42,7 @@ def calculateHypeJson(tweet, teamOneTags, teamTwoTags):
 
     teamOneTags = [tag.lower() for tag in teamOneTags]
     teamTwoTags = [tag.lower() for tag in teamTwoTags]
+    usedtags = []
     teamOneTotal = 0
     teamTwoTotal = 0
     total = 0
@@ -53,15 +54,19 @@ def calculateHypeJson(tweet, teamOneTags, teamTwoTags):
     for hashTag in tweet['entities']['hashtags']:
         if hashTag['text'].lower() in teamOneTags and hashTag['text'].lower() not in teamTwoTags:
             tempCountOne = 1
-            teamOneTagScore += 1
+            if hashTag['text'].lower() not in usedtags:
+                teamOneTagScore += 1
+                usedtags.append(hashTag['text'].lower())
         if hashTag['text'].lower() in teamTwoTags and hashTag['text'].lower() not in teamOneTags:
             tempCountTwo = 1
-            teamTwoTagScore += 1
+            if hashTag['text'].lower() not in usedtags:
+                teamTwoTagScore += 1
+                usedtags.append(hashTag['text'].lower())
 
-    if (tempCountOne and tempCountTwo):
+    if (tempCountOne and tempCountTwo) or tweet['user']['followers_count'] == 0:
         return (0,0)
 
-    tempCountOne = (1 + teamOneTagScore * float(tweet['user']['followers_count'])/1000.0) * tempCountOne
-    tempCountTwo = (1 + teamTwoTagScore * float(tweet['user']['followers_count'])/1000.0) * tempCountTwo
+    tempCountOne *= math.log(1 + (tweet['user']['followers_count'])*teamOneTagScore/500.0, 2)
+    tempCountTwo *= math.log(1 + (tweet['user']['followers_count'])*teamTwoTagScore/500.0, 2)
         
     return (tempCountOne,tempCountTwo)
