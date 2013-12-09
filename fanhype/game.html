@@ -114,7 +114,7 @@
           {{ team_one_top.tweetText }}
         </p>
         <hr>
-        <h2 class="team_one">{{ team_one_top.teamName }} hype score: {{ team_one_top.hypeScore }}</h2>
+        <h2 class="team_one">{{ team_one_top.teamName }} hype score: <span class="hype">{{ team_one_top.hypeScore }}</span></h2>
       </div>
       <div id="top_tweet_right">
         <img src="{{ team_two_top.imageUrl }}" alt="{{ team_two_top.userName }}">
@@ -127,7 +127,7 @@
         <p class="tweet_text">{{ team_two_top.tweetText }}
         </p>
         <hr>
-        <h2 class="team_two">{{ team_two_top.teamName }} hype score: {{ team_two_top.hypeScore }}</h2>
+        <h2 class="team_two">{{ team_two_top.teamName }} hype score: <span class="hype">{{ team_two_top.hypeScore }}</span></h2>
       </div>
     </div>
     <hr>
@@ -145,7 +145,7 @@
           <p class="screen_name">
             <a href="{{tweet.userName}}">@{{tweet.userName}}</a></p>
           <p>Followers: {{tweet.followerCount}}</p>
-          <p>Hype: {{tweet.hypeScore}}</p>
+          <p>Hype: <span class="hype">{{tweet.hypeScore}}</span></p>
         </div>
         {% if tweet.teamName == team_one_name  %}
         <p class="tweet_text team_one">
@@ -310,13 +310,18 @@
               }]
           });
 
-      $(function () {
+    $(function () {
         array1 = parse('{{hype_history}}');
         array2 = [];
         for(i=0; i < array1.length; i++)
           array2[i] = (100-array1[i]);
         timeArray = [];
         tickPositions = [];
+
+        start_hour = parseInt('{{game_time}}'.match(/\d{1,2}(?=:)/));
+        start_minute = parseInt('{{game_time}}'.match(/:(\d{1,2})/)[1]);
+        if('{{game_time}}'.match('PM')) start_hour += 12;
+        if('{{game_time}}'.match('12:')) start_hour -= 12;
 
         $('#history_graph').highcharts({
             chart: {
@@ -356,7 +361,7 @@
             series: [{
                 name: '{{team_one_name}}',
                 color: '{{team_one_color}}',
-                pointStart: Date.UTC(2013, 10, 7, 18, 30, 00),
+                pointStart: Date.UTC(2013, 10, 7, start_hour, start_minute, 00),
                 pointInterval: 300 * 1000,
                 data: array1,
                 marker: {
@@ -365,7 +370,7 @@
             }, {
                 name: '{{team_two_name}}',
                 color: '{{team_two_color}}',
-                pointStart: Date.UTC(2013, 10, 7, 18, 30, 00),
+                pointStart: Date.UTC(2013, 10, 7, start_hour, start_minute, 00),
                 pointInterval: 300 * 1000,
                 data: array2
             }]
@@ -385,6 +390,41 @@
         });
 
       });
+
+    function classify_hype(text) {
+      score = parseFloat(text);
+      if (score < 0)
+      {
+        rank = 'Ok';
+      }
+      else if (score < 1)
+      {
+        rank = 'Good';
+      }
+      else if (score < 2)
+      {
+        rank = 'Great';
+      }
+      else if (score < 4)
+      {
+        rank = 'Awesome';
+      }
+      else if (score <= 8)
+      {
+        rank = 'Perfect';
+      }
+      else
+      {
+        rank = 'HYPED!';
+      }
+      console.log(text + ' : ' + rank);
+
+      return rank;    
+    };
+
+    $('.hype').each(function(){
+      $(this).text(classify_hype($(this).text()));
+    });
 
   </script>
   <script src="js/highcharts.js"></script>
