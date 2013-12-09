@@ -295,3 +295,15 @@ div#legend {
 .submit_button {
   padding:5px;
 }
+
+div#history {
+  padding: 15px 5%;
+}
+
+#history h2 {
+  padding-bottom: 10px;
+}
+
+div#history_graph {
+  height: 180px;
+}

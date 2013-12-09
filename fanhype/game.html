@@ -47,6 +47,13 @@
         <img src="{{team_two_image}}" alt="{{ team_two_name }}" id="right_logo"></div>
       </div>
     <hr>
+    <div id="history">
+        <div id="history_wrapper">
+          <div id="history_title"><h2>Hype History</h2></div>
+          <div id="history_graph"></div>
+        </div>
+    </div>
+    <hr>
     <div class="split">
       <div id="heat_map">
         <h1>Heat Map</h1>
@@ -229,6 +236,14 @@
 
   google.maps.event.addDomListener(window, 'load', initialize);
 
+
+    function parse(str) {
+      data = str.split(',');
+      data.pop();
+      return $.map(data, function(value){ return parseInt(value, 10); });
+    }
+
+
     $(function () {
           $('#graph').highcharts({
               chart: {
@@ -284,17 +299,78 @@
               series: [{
                 name: 'Tweets',
                   data: [{
-            name: '{{team_one_name}}',
-            color: '{{team_one_color}}',
-            y: {{ team_one_total }}
-          }, {
-            name: '{{team_two_name}}',
-            color: '{{team_two_color}}',
-            y: {{ team_two_total }}
-          }]
+                          name: '{{team_one_name}}',
+                          color: '{{team_one_color}}',
+                          y: {{ team_one_total }}
+                        }, {
+                          name: '{{team_two_name}}',
+                          color: '{{team_two_color}}',
+                          y: {{ team_two_total }}
+                        }]
               }]
           });
 
+      $(function () {
+        array1 = parse('{{hype_history}}');
+        array2 = [];
+        for(i=0; i < array1.length; i++)
+          array2[i] = (100-array1[i]);
+        timeArray = [];
+        tickPositions = [];
+
+        $('#history_graph').highcharts({
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                  minute: '%l:%M',
+                }
+            },
+            yAxis: {
+                title: null
+            },tooltip: {
+                dateTimeLabelFormats: {
+                  hour: '%l:%M %p'
+                },
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.0f}%</b> <br/>',
+                shared: true
+            },
+            legend: {
+                enabled: null
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'percent',
+                    lineColor: '#ffffff',
+                    lineWidth: 1,
+                    marker: {
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                name: '{{team_one_name}}',
+                color: '{{team_one_color}}',
+                pointStart: Date.UTC(2013, 10, 7, 18, 30, 00),
+                pointInterval: 300 * 1000,
+                data: array1,
+                marker: {
+                    enabled: false
+                }
+            }, {
+                name: '{{team_two_name}}',
+                color: '{{team_two_color}}',
+                pointStart: Date.UTC(2013, 10, 7, 18, 30, 00),
+                pointInterval: 300 * 1000,
+                data: array2
+            }]
+        });
+    });
 
         $('.bar').each(function(){
           var teamOne = parseFloat($(this).find('.left').text());

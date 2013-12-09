@@ -136,10 +136,12 @@ def saveNewTweets(tweets):
     
     for tweet in tweets:
         tweet_time = get_date_time(tweet['created_at'])
-        if (tweet_time - current_time).total_seconds() > 600:
+        if (tweet_time - current_time).total_seconds() > 300:
             current_time = tweet_time
             history_time_string += time_string(tweet_time) + ','
-            delta_hype = history_hype_one/(history_hype_one + history_hype_two) * 100
+            delta_hype = 0
+            if history_hype_one + history_hype_two > 0:
+                delta_hype = history_hype_one/(history_hype_one + history_hype_two) * 100
             history_hype_string += str(int(delta_hype)) + ","
             history_hype_one = 0
             history_hype_two = 0
@@ -170,7 +172,9 @@ def saveNewTweets(tweets):
                 history_hype_two += hypeScore[1]
                 hypeTable.teamTwoHype += hypeScore[1]
                 hypeTable.teamTwoTweetTotal += 1
-                addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)
+                addTweetCoordinates(tweet, geoData, hypeTable.teamTwoName)\
+
+    print history_time_string
 
     #Find the top tweet of the new tweets
     for hypeTable in hypeTables:
