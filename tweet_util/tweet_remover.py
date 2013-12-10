@@ -50,8 +50,18 @@ michigan_tags = ['goblue','bighouse','beatnebraska','wolverines']
 baylor_tags = ['sicour','everyoneinblack','watchbu','sicem']
 okie_tags = ['beatbaylor','boomersooner']
 
+ou_tags = ['boomersooner', 'gosooners', 'onlyoneoklahoma']
+okie_state = ['gopokes', 'okstate']
+
+florida_state_tags = ['floridastate', 'fsu', 'noles', 'nolenation']
+duke_tags = ['dukegang', 'beatfsu', 'shocktheworld', 'goduke', 'duke']
+
 tweets = get_tweets()
-remove_tweets(tweets, baylor_tags, okie_tags)
+remove_tweets(tweets, florida_state_tags, duke_tags)
+
+
+
+
 
 
 

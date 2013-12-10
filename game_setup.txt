@@ -38,3 +38,54 @@ Location: Michigan Stadium, Ann Arbor, Michigan
 
 Corresponding game file (Do not enter until after game is created):
 tweet_util/nebraska_michigan.json
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Missouri
+	mizzou,beatauburn,gomizzou
+	#CC0000
+	http://i.imgur.com/eTXlhq7.gif
+
+Auburn
+	wareagle,beatmizzou,aufamily,wardamneagle
+	#00274c
+	http://i.imgur.com/wJB3ceE.png
+
+Title:    Missouri @ Auburn
+Time:     Saturday, November 9, 2:30 PM (CT)
+Location: Michigan Stadium, Ann Arbor, Michigan
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OSU
+	#ff5a00
+	http://i.imgur.com/3qwZPz4.png
+	boomersooner,gosooners,onlyoneoklahoma
+
+OU
+	#b00f3a
+	http://i.imgur.com/pmGqPtE.png
+	gopokes,okstate
+
+	OU @ OSU
+	12:00 PM ET, December 7, 2013
+	Boone Pickens Stadium, Stillwater, OK
+
+======================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+

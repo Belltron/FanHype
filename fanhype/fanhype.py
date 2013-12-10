@@ -180,7 +180,7 @@ def saveNewTweets(tweets):
     #Find the top tweet of the new tweets
     for hypeTable in hypeTables:
         team_one_game_tweets = [tweet for tweet in tweets if tweet['teamname'] == hypeTable.teamOneName]
-        if len(team_one_game_tweets) > 25:
+        if len(team_one_game_tweets) > 200:
             hypeTable.gameHypeHistory += history_hype_string
             hypeTable.gameTimeHistory += history_time_string
         calculateTopTweet(team_one_game_tweets)
@@ -207,7 +207,7 @@ def getLatestTweets(tweets, teamName):
     else:
         tweetsLength = len(tweets)
         lastFiveTweets = tweets[-tweetsLength:] 
-    team = (lastFiveTweets[-1])['teamname']
+    team = teamName
             
     dataStoreLatestTweets = models.LatestTweets.query(models.TopTweet.teamName == teamName).fetch()
     tempTweets = dataStoreLatestTweets
