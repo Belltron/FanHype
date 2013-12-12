@@ -15,12 +15,14 @@ output_file = open(output_file_name, "a")
 def read_data(filename):
 	data = []
 	try:
-		with open(filename) as f:
+		with open(filename, 'r') as f:
 			for line in f:
-				if line != '\n':
-					data.append (json.loads (line.strip()))
-	except:
+				line = line.strip()
+				if line:
+					data.append (json.loads (line))
+	except ValueError as detail:
 		print "Error reading file: "+filename
+		print str(detail)
 		return []
 	return data
 
@@ -31,30 +33,20 @@ def get_tweets():
 
 def transform_tweets(tweets):
 	for tweet in tweets:
-		try:
+		if not 'limit' in tweet: # prevent parsing twitters 'limit' messages
 			short_tweet = {
 				"coordinates": tweet['coordinates'],
 				"created_at": tweet["created_at"],
 				"entities": { 
 					'hashtags': tweet["entities"]["hashtags"]
 					},
-				"favorite_count": tweet["favorite_count"],
-				"filter_level": tweet["filter_level"],
-				"id": tweet["id"],
-				"lang": tweet["lang"],
-				"retweet_count": tweet["retweet_count"],
 				"text": tweet["text"],
 				 "user": {
 				 	"screen_name": tweet['user']['screen_name'],
-				 	"profile_img_url": tweet['user']['profile_image_url'],
-				 	"verified": tweet['user']['verified'],
-				 	'followers_count': tweet['user']['followers_count'],
-				 	'friends_count': tweet['user']['friends_count']
+				 	"profile_image_url": tweet['user']['profile_image_url'],
+				 	'followers_count': tweet['user']['followers_count']
 				 	}}
 			output_file.write (json.dumps (short_tweet) + '\n')
-		except:
-			print 'oops'
-
 
 tweets = get_tweets()
 transform_tweets(tweets)
