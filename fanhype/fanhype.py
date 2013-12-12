@@ -36,6 +36,10 @@ class MainPage(webapp2.RequestHandler):
         template_values = {'games': games}
         self.response.write(template.render(template_values))
 
+class About(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('about.html')
+        self.response.write(template.render())
 
 class Game(webapp2.RequestHandler):
     def get(self):
@@ -269,6 +273,7 @@ def calculateTopTweet(tweets):
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/about', About),
     ('/game', Game),
     ('/savetweet', SaveTweet),
     ('/newgame', game_control.NewGame),

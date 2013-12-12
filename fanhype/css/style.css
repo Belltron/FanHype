@@ -70,12 +70,16 @@ hr {
   background: #000;
   border: 0; }
 
+div#content {
+  padding: 15px;
+}
+
 article {
   display: block;
   position: relative;
   width: 810px;
   height: 180px;
-  margin: 30px auto 0;
+  margin: 15px auto 15px;
   text-align: center;
   background: #fff;
   border: 1px solid #000; }
@@ -149,3 +153,31 @@ div#debug {
   width: 400px;
   margin: 90px auto;
   text-align: center; }
+
+div#about {
+  margin: 0 auto;
+  width: 90%;
+  text-align: center;
+}
+
+#about a {
+  color: #000;
+  text-decoration: underline;
+}
+
+#about a:hover {
+  color: #ff3838;
+}
+
+#about h1 {
+  padding: 30px;
+}
+
+#about p {
+  text-align: justify;
+  margin: 0 auto;
+  padding-bottom: 15px;
+  width: 80%;
+  max-width: 720px;
+}
+
