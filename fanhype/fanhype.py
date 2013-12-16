@@ -8,7 +8,6 @@ from google.appengine.ext import ndb, db
 import jinja2
 import os
 import models
-import config
 import analyzer
 import game_control
 import time
