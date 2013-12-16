@@ -1,0 +1,45 @@
+{% autoescape true %}
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+	<link href='css/style.css' rel='stylesheet' type='text/css'>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+</head>
+  <body>
+	<nav>
+		<h1 id="mark"><a href="/">fanhype</a></h1>
+		<ul>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/about">ABOUT</a></li>
+      <!-- <li><a href="/newgame">ADMIN</a></li> -->
+		</ul>
+	</nav>
+	<hr>
+	<div id="about">
+		<h1>About fanhype</h1>
+		<p>This was a project created for <a href="#">Dr. James Caverlee's</a> <a href="#">Fall 2013 Information Retrieval course.</a> The goal of the project was to solve a problem using non-trivial data that implemented one of the algorithms that was discussed in class.</p>
+		<p>We decided to implement an application that observed the amount of activity, or hype, that a certain fanbase was generating during a football game. We gathered tweets for both teams during football games, and sorted them by who they were hyped for.</p>
+		<p>We also created an algorithm that observed tweets and gave them a hype ranking based on the tweeter's popularity and the quality of their tweet.</p>
+		<p>The project was created by Brian Bell, William Guerra, and Jason Harris.</p>
+	</div>
+
+	<script>
+		$(function(){
+			$('.bar').each(function(){
+				var teamOne = parseFloat($(this).find('.left').text());
+				var teamTwo = parseFloat($(this).find('.right').text());
+				var fullWidth = $(this).width();
+				var percentage = (teamOne / (teamOne + teamTwo)) * 100;
+				var teamOnePercentage = Math.round(percentage);
+				var teamTwoPercentage = 100-teamOnePercentage;
+				$(this).find('.left').width(fullWidth* (teamOnePercentage/100));
+				$(this).find('.left').text(teamOnePercentage + "%")
+				$(this).find('.right').text(teamTwoPercentage + "%")
+			});
+		});
+	</script>
+</body>
+</html>
+
+{% endautoescape %}
